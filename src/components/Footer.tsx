@@ -18,7 +18,7 @@ export default function Footer() {
               <a href="https://wa.me/26879375018" target="_blank" className="p-2.5 bg-slate-900 rounded-full text-slate-400 hover:text-green-400 hover:bg-slate-800 transition-colors" onClick={() => playSynthBeep(450, 0.05)}>
                 <Phone className="w-4 h-4" />
               </a>
-              <a href="mailto:atsabedzedigital@gmail.com" className="p-2.5 bg-slate-900 rounded-full text-slate-400 hover:text-brand-electricBlue hover:bg-slate-800 transition-colors" onClick={() => playSynthBeep(490, 0.05)}>
+              <a href="mailto:thembelaandrew@gmail.com" className="p-2.5 bg-slate-900 rounded-full text-slate-400 hover:text-brand-electricBlue hover:bg-slate-800 transition-colors" onClick={() => playSynthBeep(490, 0.05)}>
                 <Mail className="w-4 h-4" />
               </a>
             </div>

@@ -10,29 +10,53 @@ export default function Contact() {
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleFormSubmission = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!formRef.current) return;
+    e.preventDefault(); // 1. Prevent default browser page reload
+    if (!formRef.current) {
+      console.error('EmailJS: Form reference is missing.');
+      return;
+    }
     
     setIsSubmitting(true);
     setError(null);
     setSubmitted(false);
 
+    console.log('EmailJS: Starting submission process...', {
+      serviceId: 'service_ia09u36',
+      templateId: 'template_ehl0jih',
+    });
+
     try {
-      await emailjs.sendForm(
+      // 2. Await the sendForm promise to ensure it completes before resetting
+      const response = await emailjs.sendForm(
         'service_ia09u36',
         'template_ehl0jih',
         formRef.current,
-        'A9RbRJq0719TUlvNx'
+        'A9RbRJq0719TUlvNx' // Public key is correct as 4th argument
       );
+      
+      console.log('EmailJS: Success!', { status: response.status, text: response.text });
       setSubmitted(true);
       playSynthBeep(900, 0.2, 'triangle');
-      formRef.current.reset();
+      formRef.current.reset(); // 3. Safe to reset here since await has finished
     } catch (err: any) {
-      console.error('EmailJS error:', err);
-      setError('Failed to send message. Please try again later or contact us directly.');
+      // 4. Detailed error logging to catch exact failure reason
+      console.error('EmailJS: Error caught during sendForm():', err);
+      
+      let errorMessage = 'Failed to send message. Please try again later.';
+      
+      // EmailJS errors often come as an object with status and text properties
+      if (err?.status || err?.text) {
+        console.error(`EmailJS Error Details - Status: ${err.status}, Text: ${err.text}`);
+        errorMessage = `EmailJS Error (${err.status}): ${err.text}`;
+      } else if (err instanceof Error) {
+        errorMessage = err.message;
+      }
+      
+      setError(errorMessage);
       playSynthBeep(200, 0.2, 'square');
     } finally {
       setIsSubmitting(false);
+      console.log('EmailJS: Submission process completed.');
     }
   };
 
@@ -60,13 +84,13 @@ export default function Contact() {
                     <p className="text-sm text-white font-bold">+268 79375018</p>
                   </div>
                 </a>
-                <a href="mailto:atsabedzedigital@gmail.com" className="flex items-center gap-4 glassmorphism p-4 rounded-xl border border-white/5 hover:border-brand-electricBlue/40 transition-all block" onClick={() => playSynthBeep(550, 0.05)}>
+                <a href="mailto:thembelaandrew@gmail.com" className="flex items-center gap-4 glassmorphism p-4 rounded-xl border border-white/5 hover:border-brand-electricBlue/40 transition-all block" onClick={() => playSynthBeep(550, 0.05)}>
                   <div className="w-11 h-11 rounded-lg bg-brand-electricBlue/10 text-brand-electricBlue flex items-center justify-center border border-brand-electricBlue/20 shrink-0">
                     <Mail className="w-5 h-5" />
                   </div>
                   <div>
                     <h4 className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Email Address</h4>
-                    <p className="text-sm text-white font-bold">atsabedzedigital@gmail.com</p>
+                    <p className="text-sm text-white font-bold">thembelaandrew@gmail.com</p>
                   </div>
                 </a>
               </div>
