@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect, FormEvent } from 'react';
 import { MessageSquare, X, Send, Minus } from 'lucide-react';
 import { playSynthBeep } from '../lib/audio';
-import emailjs from '@emailjs/browser';
 
 interface Message {
   text: string;
@@ -15,8 +14,6 @@ export default function Chatbot() {
   ]);
   const [input, setInput] = useState('');
   const [isSending, setIsSending] = useState(false);
-  const [chatStep, setChatStep] = useState<'initial' | 'awaiting_name' | 'awaiting_email' | 'finished'>('initial');
-  const [inquiryData, setInquiryData] = useState({ question: '', name: '', email: '' });
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -33,77 +30,41 @@ export default function Chatbot() {
     const text = preset || input;
     if (!text.trim() || isSending) return;
 
-    // Immediately show user message
-    setMessages(prev => [...prev, { text, isBot: false }]);
+    // Add user message
+    const newMessages = [...messages, { text, isBot: false }];
+    setMessages(newMessages);
     setInput('');
     setIsSending(true);
 
-    if (chatStep === 'initial') {
-      setInquiryData(prev => ({ ...prev, question: text }));
-      setTimeout(() => {
-        setMessages(prev => [...prev, { text: "To help us get back to you with the best response, what is your name?", isBot: true }]);
-        setChatStep('awaiting_name');
-        setIsSending(false);
-        playSynthBeep(600, 0.08);
-      }, 500);
-      return;
-    }
+    try {
+      // Format messages for Gemini
+      const geminiMessages = newMessages.map(msg => ({
+        role: msg.isBot ? 'model' : 'user',
+        parts: [{ text: msg.text }]
+      }));
 
-    if (chatStep === 'awaiting_name') {
-      setInquiryData(prev => ({ ...prev, name: text }));
-      setTimeout(() => {
-        setMessages(prev => [...prev, { text: `Thanks, ${text}! And what is your email address?`, isBot: true }]);
-        setChatStep('awaiting_email');
-        setIsSending(false);
-        playSynthBeep(600, 0.08);
-      }, 500);
-      return;
-    }
+      // Send to our backend
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: geminiMessages })
+      });
 
-    if (chatStep === 'awaiting_email') {
-      const email = text;
-      setInquiryData(prev => ({ ...prev, email: email }));
-
-      try {
-        // Send chat message via EmailJS backend
-        await emailjs.send(
-          'service_ia09u36',
-          'template_ehl0jih',
-          {
-            user_name: inquiryData.name,
-            user_email: email,
-            business_name: 'N/A',
-            phone_number: 'N/A',
-            service_needed: 'Live Chatbot Inquiry',
-            message: inquiryData.question
-          },
-          'A9RbRJq0719TUlvNx'
-        );
-
-        setTimeout(() => {
-          setMessages(prev => [...prev, { text: `Thank you, ${inquiryData.name}. Our team has received your request and will contact you at ${email} shortly. You can also reach us on WhatsApp at +268 79375018 for a faster response.`, isBot: true }]);
-          setChatStep('finished');
-          playSynthBeep(600, 0.08);
-        }, 500);
-      } catch (err) {
-        console.error('EmailJS error in chatbot:', err);
-        setTimeout(() => {
-          setMessages(prev => [...prev, { text: `Sorry, there was an error sending your message. Please reach us directly on WhatsApp at +268 79375018 or via email at thembelaandrew@gmail.com.`, isBot: true }]);
-          // Reset so they can try again if they want
-          setChatStep('initial');
-          playSynthBeep(200, 0.2, 'square');
-        }, 500);
-      } finally {
-        setIsSending(false);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
-      return;
-    }
 
-    if (chatStep === 'finished') {
-       setTimeout(() => {
-         setMessages(prev => [...prev, { text: "We already received your request! We'll be in touch soon.", isBot: true }]);
-         setIsSending(false);
-       }, 500);
+      const data = await response.json();
+      
+      setMessages(prev => [...prev, { text: data.text, isBot: true }]);
+      playSynthBeep(600, 0.08);
+      
+    } catch (err) {
+      console.error('Chat error:', err);
+      setMessages(prev => [...prev, { text: `Sorry, there was an error connecting to our assistant. Please reach us directly on WhatsApp at +268 79375018 or via email at thembelaandrew@gmail.com.`, isBot: true }]);
+      playSynthBeep(200, 0.2, 'square');
+    } finally {
+      setIsSending(false);
     }
   };
 
