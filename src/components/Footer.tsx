@@ -1,4 +1,4 @@
-import { Phone, Mail } from 'lucide-react';
+import { Phone, Mail, Instagram, Facebook } from 'lucide-react';
 import { playSynthBeep } from '../lib/audio';
 
 export default function Footer() {
@@ -15,11 +15,17 @@ export default function Footer() {
               Helping businesses, churches, and organizations build smarter digital experiences through modern websites and automation solutions.
             </p>
             <div className="flex items-center gap-3">
-              <a href="https://wa.me/26879375018" target="_blank" className="p-2.5 bg-slate-900 rounded-full text-slate-400 hover:text-green-400 hover:bg-slate-800 transition-colors" onClick={() => playSynthBeep(450, 0.05)}>
+              <a href="https://wa.me/26879375018?text=Hi%20I%20would%20like%20to%20work%20with%20Nexaflow%20AI" target="_blank" className="p-2.5 bg-slate-900 rounded-full text-slate-400 hover:text-green-400 hover:bg-slate-800 transition-colors" onClick={() => playSynthBeep(450, 0.05)}>
                 <Phone className="w-4 h-4" />
               </a>
-              <a href="mailto:thembelaandrew@gmail.com" className="p-2.5 bg-slate-900 rounded-full text-slate-400 hover:text-brand-electricBlue hover:bg-slate-800 transition-colors" onClick={() => playSynthBeep(490, 0.05)}>
+              <a href="mailto:andrewtsabedze943@gmail.com" className="p-2.5 bg-slate-900 rounded-full text-slate-400 hover:text-brand-electricBlue hover:bg-slate-800 transition-colors" onClick={() => playSynthBeep(490, 0.05)}>
                 <Mail className="w-4 h-4" />
+              </a>
+              <a href="https://www.instagram.com/nexaflow_ai.africa?igsh=MXRzdzc0MTdvYjYxaQ==" target="_blank" className="p-2.5 bg-slate-900 rounded-full text-slate-400 hover:text-pink-500 hover:bg-slate-800 transition-colors" onClick={() => playSynthBeep(520, 0.05)}>
+                <Instagram className="w-4 h-4" />
+              </a>
+              <a href="https://www.facebook.com/profile.php?id=61591884524709" target="_blank" className="p-2.5 bg-slate-900 rounded-full text-slate-400 hover:text-blue-500 hover:bg-slate-800 transition-colors" onClick={() => playSynthBeep(550, 0.05)}>
+                <Facebook className="w-4 h-4" />
               </a>
             </div>
           </div>

@@ -120,6 +120,26 @@ export default function Hero() {
               <span className="text-sm font-medium">Reliable Support & Clean Standards</span>
             </div>
           </div>
+          
+          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-6 w-full">
+            <span className="text-xs text-slate-500 font-bold uppercase tracking-widest w-full text-center lg:text-left mb-1">Quick Links</span>
+            {[
+              { id: 'services', label: 'Services' },
+              { id: 'portfolio-preview', label: 'Featured Work' },
+              { id: 'pricing', label: 'Pricing' },
+              { id: 'referral', label: 'Partner & Earn' },
+              { id: 'faq', label: 'FAQs' }
+            ].map((link) => (
+              <a 
+                key={link.id} 
+                href={`#${link.id}`}
+                className="px-4 py-1.5 rounded-full glassmorphism text-slate-300 text-sm font-semibold border border-white/5 hover:border-brand-electricBlue hover:bg-brand-electricBlue/10 hover:text-white transition-all shadow-sm"
+                onClick={() => playSynthBeep(500, 0.05)}
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
         </div>
 
         {/* Right Visual Mock Card */}

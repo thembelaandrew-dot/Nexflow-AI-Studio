@@ -1,21 +1,26 @@
 import { useState } from 'react';
 import { playSynthBeep } from '../lib/audio';
-
-const faqs = [
-  { q: "How long does it take to deploy a premium website?", a: "Most websites are completed within 3–7 business days depending on project requirements, content availability, and revision requests. More advanced projects may require additional time." },
-  { q: "What is AI Business Automation, and how does it help us?", a: "AI Business Automation helps streamline repetitive tasks such as lead capture, customer follow-ups, appointment booking, and internal workflows. This saves time and improves operational efficiency." },
-  { q: "Can we track our leads and overall site traffic ourselves?", a: "Yes. Analytics and tracking tools can be integrated so you can monitor website traffic, visitor behavior, lead submissions, and overall performance." },
-  { q: "Do you offer continuous support after launch?", a: "Absolutely. Ongoing support, updates, maintenance, and technical assistance are available to ensure your digital systems continue operating smoothly." },
-  { q: "How much do your services cost?", a: "Pricing depends on project scope and requirements. Every solution is tailored to client needs. Contact us for a consultation and customized quote." }
-];
+import { useCurrency } from '../lib/CurrencyContext';
 
 export default function FAQ() {
+  const { formatPrice } = useCurrency();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const toggle = (index: number) => {
     playSynthBeep(520, 0.05);
     setOpenIndex(openIndex === index ? null : index);
   };
+
+  const faqs = [
+    { q: "How much do your services cost?", a: `We offer transparent pricing: Landing Pages from ${formatPrice(27)}, Starter Websites from ${formatPrice(80)}, Business Websites from ${formatPrice(190)}, and comprehensive Website + AI Automation packages at a discounted ${formatPrice(325)}. All prices can be tailored during a free consultation based on your exact needs.` },
+    { q: "How long does delivery take?", a: "A standard Landing Page or Starter Website typically takes 1 to 2 weeks. More complex Business Websites and Automation systems generally take 2 to 4 weeks depending on the project scope and how quickly we receive content from you." },
+    { q: "What are your payment terms?", a: "We typically require a 50% deposit before work begins, with the remaining 50% due upon project completion and your final approval. Payment plans can be discussed for larger projects." },
+    { q: "Do you offer revisions?", a: "Yes. Every project includes a built-in review and revision phase. We want to ensure you are 100% satisfied with the design and functionality before we go live." },
+    { q: "Do you provide hosting?", a: "Yes, we can manage hosting and domain registration for you so you don't have to worry about the technical details. We use fast, secure, and reliable cloud hosting." },
+    { q: "Do you offer ongoing maintenance?", a: "Absolutely. We offer ongoing maintenance and support packages to keep your website updated, secure, and running smoothly long after the initial launch." },
+    { q: "What is AI Business Automation?", a: "AI Business Automation uses smart software (like AI chatbots, automated email responses, and lead capture workflows) to handle repetitive tasks. This saves you time, reduces manual data entry, and helps convert visitors into paying clients 24/7." },
+    { q: "How does the Referral Program work?", a: `Anyone can join! Simply refer a business to Nexaflow AI. If they become a client, you earn a commission ranging from ${formatPrice(3)} to ${formatPrice(50)} depending on the package they choose. Commissions are paid once the client completes their first payment.` }
+  ];
 
   return (
     <section id="faq" className="py-24 relative overflow-hidden border-t border-slate-800">
@@ -25,7 +30,6 @@ export default function FAQ() {
           <h2 className="text-3xl sm:text-4xl font-extrabold mt-4 text-white">Frequently Asked Questions</h2>
           <p className="text-slate-400 mt-2">Clear answers about our development timelines, custom pricing, and integrations.</p>
         </div>
-
         <div className="space-y-4">
           {faqs.map((faq, index) => {
             const isOpen = openIndex === index;
@@ -38,7 +42,7 @@ export default function FAQ() {
                     <span className={`absolute block w-0.5 h-5 bg-brand-cyanAccent transition-transform duration-300 ease-in-out ${isOpen ? 'scale-y-0' : 'scale-y-100'}`}></span>
                   </div>
                 </button>
-                <div className={`faq-content overflow-hidden transition-all duration-300 ease-in-out bg-slate-900/40 ${isOpen ? 'max-h-40' : 'max-h-0'}`}>
+                <div className={`faq-content overflow-hidden transition-all duration-300 ease-in-out bg-slate-900/40 ${isOpen ? 'max-h-60' : 'max-h-0'}`}>
                   <p className="p-6 text-sm text-slate-300 leading-relaxed">
                     {faq.a}
                   </p>

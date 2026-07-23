@@ -75,7 +75,7 @@ export default function Contact() {
 
               {/* Direct contact details */}
               <div className="space-y-4">
-                <a href="https://wa.me/26879375018" target="_blank" className="flex items-center gap-4 glassmorphism p-4 rounded-xl border border-white/5 hover:border-brand-cyanAccent/40 transition-all block" onClick={() => playSynthBeep(550, 0.05)}>
+                <a href="https://wa.me/26879375018?text=Hi%20I%20would%20like%20to%20work%20with%20Nexaflow%20AI" target="_blank" className="flex items-center gap-4 glassmorphism p-4 rounded-xl border border-white/5 hover:border-brand-cyanAccent/40 transition-all block" onClick={() => playSynthBeep(550, 0.05)}>
                   <div className="w-11 h-11 rounded-lg bg-green-500/10 text-green-400 flex items-center justify-center border border-green-500/20 shrink-0">
                     <Phone className="w-5 h-5" />
                   </div>
@@ -84,15 +84,25 @@ export default function Contact() {
                     <p className="text-sm text-white font-bold">+268 79375018</p>
                   </div>
                 </a>
-                <a href="mailto:thembelaandrew@gmail.com" className="flex items-center gap-4 glassmorphism p-4 rounded-xl border border-white/5 hover:border-brand-electricBlue/40 transition-all block" onClick={() => playSynthBeep(550, 0.05)}>
+                <a href="mailto:andrewtsabedze943@gmail.com" className="flex items-center gap-4 glassmorphism p-4 rounded-xl border border-white/5 hover:border-brand-electricBlue/40 transition-all block" onClick={() => playSynthBeep(550, 0.05)}>
                   <div className="w-11 h-11 rounded-lg bg-brand-electricBlue/10 text-brand-electricBlue flex items-center justify-center border border-brand-electricBlue/20 shrink-0">
                     <Mail className="w-5 h-5" />
                   </div>
                   <div>
                     <h4 className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Email Address</h4>
-                    <p className="text-sm text-white font-bold">thembelaandrew@gmail.com</p>
+                    <p className="text-sm text-white font-bold">andrewtsabedze943@gmail.com</p>
                   </div>
                 </a>
+
+                <div className="flex items-center gap-4 glassmorphism p-4 rounded-xl border border-white/5">
+                  <div className="w-11 h-11 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center border border-amber-500/20 shrink-0">
+                    <Calendar className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Business Hours</h4>
+                    <p className="text-sm text-white font-bold">Mon - Fri: 8:00 AM - 5:00 PM</p>
+                  </div>
+                </div>
               </div>
 
               {/* Embed Google Map */}
@@ -110,7 +120,7 @@ export default function Contact() {
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <a href="https://wa.me/26879375018" target="_blank" className="flex-1 py-4 px-6 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold text-center flex items-center justify-center gap-2 hover:opacity-90 hover:scale-102 transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)]" onClick={() => playSynthBeep(650, 0.1)}>
+                  <a href="https://wa.me/26879375018?text=Hi%20I%20would%20like%20to%20work%20with%20Nexaflow%20AI" target="_blank" className="flex-1 py-4 px-6 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold text-center flex items-center justify-center gap-2 hover:opacity-90 hover:scale-102 transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)]" onClick={() => playSynthBeep(650, 0.1)}>
                     <Phone className="w-5 h-5" />
                     <span>Chat on WhatsApp</span>
                   </a>
@@ -197,7 +207,7 @@ export default function Contact() {
             <a href="#contact" className="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-brand-electricBlue to-brand-cyanAccent text-white font-bold shadow-lg hover:opacity-90 hover:scale-102 transition-all text-center" onClick={() => playSynthBeep(880, 0.1)}>
               Book Consultation
             </a>
-            <a href="https://wa.me/26879375018" target="_blank" className="w-full sm:w-auto px-8 py-4 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white font-bold flex items-center justify-center gap-2 hover:scale-102 transition-all text-center" onClick={() => playSynthBeep(600, 0.08)}>
+            <a href="https://wa.me/26879375018?text=Hi%20I%20would%20like%20to%20work%20with%20Nexaflow%20AI" target="_blank" className="w-full sm:w-auto px-8 py-4 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white font-bold flex items-center justify-center gap-2 hover:scale-102 transition-all text-center" onClick={() => playSynthBeep(600, 0.08)}>
               <Phone className="w-5 h-5 text-green-400" />
               <span>Chat on WhatsApp</span>
             </a>

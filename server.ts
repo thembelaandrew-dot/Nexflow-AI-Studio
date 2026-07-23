@@ -6,7 +6,14 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const ai = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY,
+  httpOptions: {
+    headers: {
+      'User-Agent': 'aistudio-build',
+    }
+  }
+});
 
 async function startServer() {
   const app = express();
@@ -17,37 +24,39 @@ async function startServer() {
   // API route for Chatbot
   app.post("/api/chat", async (req, res) => {
     try {
+      console.log("Chatbot: Received request to /api/chat");
       const { messages } = req.body;
-      // messages is an array of { role: 'user' | 'model', parts: [{ text: string }] }
+      
+      if (!process.env.GEMINI_API_KEY) {
+        console.warn("Chatbot: GEMINI_API_KEY is not set. Failing gracefully to trigger client fallback.");
+        return res.status(503).json({ error: "Gemini API key not configured" });
+      }
       
       const systemInstruction = `You are Nexaflow AI's virtual business consultant. Your goal is to help visitors understand our services, qualify leads, and encourage them to book a free consultation.
 Always be friendly, professional, and concise.
-Start by asking questions instead of immediately giving long explanations.
-Learn about the visitor's business before recommending solutions.
-Nexaflow AI offers:
-Professional Website Development
-AI Business Automation
-Lead Generation
-Business Process Automation
-Digital Business Solutions
-When someone explains their business:
-Identify their biggest challenge.
-Recommend the most suitable Nexaflow AI service.
-Explain how it saves time or increases revenue.
-Ask one relevant follow-up question.
-If someone is interested in working with us, politely collect:
-Name
-Business name
-Email
-Phone number
-Desired service
-Never overwhelm visitors with long paragraphs. Keep responses conversational and under 150 words unless more detail is requested.
-If you don't know something, say so honestly instead of making it up.
-End conversations by inviting the visitor to schedule a free consultation or leave their contact information.
-CRITICAL: Once you have successfully collected the visitor's Name, Business name, Email, Phone number, and Desired service, you MUST immediately call the 'submit_lead' function to send this information to our team. After calling the function, thank the user and let them know we will be in touch soon.`;
 
+Nexaflow AI Services & Pricing:
+1. Landing Page (E500): Responsive one-page website, WhatsApp integration, Contact form, Google Maps, Mobile optimized. Ideal for restaurants, salons, personal brands.
+2. Starter Website (E1,500): Up to 5 pages, Gallery, Basic SEO.
+3. Business Website (E3,500): Starter + Booking forms, Blog, Advanced UI, Better SEO, Premium animations.
+4. Website + AI Automation (Opening Discount: E6,000): Complete business website + AI Chatbot, Lead capture, Email/Appointment automation, Google Sheets CRM integration. Saves time, reduces repetitive work, generates leads.
+
+Referral Program:
+Earn Money by Referring Clients to Nexaflow AI.
+Commissions: Landing Page (E50), Starter Website (E200), Business Website (E500), Website + AI Automation (E900).
+
+Delivery time: Depends on project complexity, generally 1-4 weeks.
+Payment: Discussed during free consultation.
+Process: 1. Submit Inquiry 2. Free Consultation 3. Quotation 4. Design & Dev 5. Review 6. Launch 7. Support.
+
+When someone explains their business: Identify their biggest challenge. Recommend the most suitable service.
+If the visitor asks something beyond your knowledge or requests a quotation, naturally respond with: "I'd be happy to connect you with Andrew for more detailed assistance. May I have your name and email address?"
+
+CRITICAL: Once you have successfully collected at least the visitor's Name and Email, you MUST immediately call the 'submit_lead' function. You can infer or ask for 'requested_service' and 'message' (conversation summary). After calling the function, confirm with: "Thank you! Your details have been sent successfully. Andrew will get back to you as soon as possible."`;
+
+      console.log("Chatbot: Calling Gemini API with messages...", JSON.stringify(messages.slice(-1)));
       const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
+        model: "gemini-3.5-flash",
         contents: messages,
         config: {
           systemInstruction,
@@ -56,18 +65,16 @@ CRITICAL: Once you have successfully collected the visitor's Name, Business name
             functionDeclarations: [
               {
                 name: "submit_lead",
-                description: "Submits a qualified lead's contact information and inquiry details to the Nexaflow AI team via email.",
+                description: "Submits a qualified lead's contact information to Andrew at Nexaflow AI via email.",
                 parameters: {
                   type: Type.OBJECT,
                   properties: {
-                    user_name: { type: Type.STRING, description: "The visitor's full name" },
-                    business_name: { type: Type.STRING, description: "The visitor's business or company name" },
-                    user_email: { type: Type.STRING, description: "The visitor's email address" },
-                    phone_number: { type: Type.STRING, description: "The visitor's phone number" },
-                    service_needed: { type: Type.STRING, description: "The specific Nexaflow AI service they are interested in" },
-                    message: { type: Type.STRING, description: "A brief summary of their business challenge and needs" }
+                    visitor_name: { type: Type.STRING, description: "The visitor's full name" },
+                    visitor_email: { type: Type.STRING, description: "The visitor's email address" },
+                    requested_service: { type: Type.STRING, description: "The specific Nexaflow AI service they are interested in" },
+                    conversation_summary: { type: Type.STRING, description: "A brief summary of their needs and the conversation" }
                   },
-                  required: ["user_name", "business_name", "user_email", "phone_number", "service_needed", "message"]
+                  required: ["visitor_name", "visitor_email", "requested_service", "conversation_summary"]
                 }
               }
             ]
@@ -75,6 +82,7 @@ CRITICAL: Once you have successfully collected the visitor's Name, Business name
         }
       });
 
+      console.log("Chatbot: Gemini API responded.");
       let responseText = response.text || "";
       let functionCall = null;
 
@@ -83,15 +91,23 @@ CRITICAL: Once you have successfully collected the visitor's Name, Business name
         if (call.name === "submit_lead") {
           functionCall = call;
           
-          // Execute the tool: Send email via EmailJS REST API
+          console.log("Chatbot: Tool call 'submit_lead' triggered. Preparing EmailJS payload...", call.args);
           try {
             const emailjsPayload = {
               service_id: "service_ia09u36",
               template_id: "template_ehl0jih",
               user_id: "A9RbRJq0719TUlvNx",
-              template_params: call.args
+              template_params: {
+                user_name: call.args.visitor_name,
+                user_email: call.args.visitor_email,
+                service_needed: call.args.requested_service,
+                message: call.args.conversation_summary + `\n\nDate & Time: ${new Date().toLocaleString()}`,
+                business_name: "N/A",
+                phone_number: "N/A"
+              }
             };
             
+            console.log("Chatbot: Sending fetch request to EmailJS API...");
             const emailResponse = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -99,25 +115,24 @@ CRITICAL: Once you have successfully collected the visitor's Name, Business name
             });
             
             if (emailResponse.ok) {
-              console.log("Lead submitted successfully via EmailJS!");
+              console.log(`Chatbot: EmailJS SUCCESS! Status: ${emailResponse.status}. Lead submitted.`);
             } else {
-              console.error("Failed to submit lead to EmailJS:", await emailResponse.text());
+              const errorText = await emailResponse.text();
+              console.error(`Chatbot: EmailJS FAILED. Status: ${emailResponse.status}. Response:`, errorText);
             }
           } catch (e) {
-            console.error("Error calling EmailJS API:", e);
+            console.error("Chatbot: Exception calling EmailJS API:", e);
           }
 
-          // We should ideally pass the tool result back to Gemini to get a final response, 
-          // but for simplicity we can just return a fixed message or let the model's parallel text be used.
           if (!responseText) {
-             responseText = "Thank you! I have successfully forwarded your information to the Nexaflow AI team. Andrew Tsabedze or another team member will be in touch with you at thembelaandrew@gmail.com shortly. You can also reach us on WhatsApp at +268 79375018.";
+             responseText = "Thank you! Your details have been sent successfully. Andrew will get back to you as soon as possible.";
           }
         }
       }
 
       res.json({ text: responseText, functionCall });
     } catch (error) {
-      console.error("Gemini API error:", error);
+      console.error("Chatbot: Backend API error during Gemini call or processing:", error);
       res.status(500).json({ error: "Failed to process chat message" });
     }
   });

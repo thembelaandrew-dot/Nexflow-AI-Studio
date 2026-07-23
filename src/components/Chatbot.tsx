@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, FormEvent } from 'react';
 import { MessageSquare, X, Send, Minus } from 'lucide-react';
 import { playSynthBeep } from '../lib/audio';
+import emailjs from '@emailjs/browser';
 
 interface Message {
   text: string;
@@ -14,6 +15,9 @@ export default function Chatbot() {
   ]);
   const [input, setInput] = useState('');
   const [isSending, setIsSending] = useState(false);
+  const [chatMode, setChatMode] = useState<'normal' | 'fallback_name' | 'fallback_email'>('normal');
+  const [fallbackData, setFallbackData] = useState({ name: '', email: '', message: '' });
+  
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -36,7 +40,55 @@ export default function Chatbot() {
     setInput('');
     setIsSending(true);
 
+    if (chatMode === 'fallback_name') {
+      setFallbackData(prev => ({ ...prev, name: text }));
+      setTimeout(() => {
+        setMessages(prev => [...prev, { text: `Thanks, ${text}! And what is your email address?`, isBot: true }]);
+        setChatMode('fallback_email');
+        setIsSending(false);
+        playSynthBeep(600, 0.08);
+      }, 500);
+      return;
+    }
+
+    if (chatMode === 'fallback_email') {
+      setFallbackData(prev => ({ ...prev, email: text }));
+      
+      try {
+        console.log("Chatbot (Fallback): Sending EmailJS...", fallbackData);
+        await emailjs.send(
+          'service_ia09u36',
+          'template_ehl0jih',
+          {
+            user_name: fallbackData.name,
+            user_email: text,
+            service_needed: 'General Inquiry (Fallback)',
+            message: `User inquired about: ${fallbackData.message}\n\nDate & Time: ${new Date().toLocaleString()}`,
+            business_name: 'N/A',
+            phone_number: 'N/A'
+          },
+          'A9RbRJq0719TUlvNx'
+        );
+        setTimeout(() => {
+          setMessages(prev => [...prev, { text: "Thank you! Your details have been sent successfully. Andrew will get back to you as soon as possible.", isBot: true }]);
+          setChatMode('normal');
+          setIsSending(false);
+          playSynthBeep(600, 0.08);
+        }, 500);
+      } catch (err) {
+        console.error("Chatbot (Fallback): EmailJS failed", err);
+        setTimeout(() => {
+          setMessages(prev => [...prev, { text: "Sorry, there was an error sending your details. Please contact us directly on WhatsApp at +268 79375018.", isBot: true }]);
+          setChatMode('normal');
+          setIsSending(false);
+          playSynthBeep(200, 0.2, 'square');
+        }, 500);
+      }
+      return;
+    }
+
     try {
+      console.log("Chatbot: Sending to /api/chat");
       // Format messages for Gemini
       const geminiMessages = newMessages.map(msg => ({
         role: msg.isBot ? 'model' : 'user',
@@ -51,17 +103,21 @@ export default function Chatbot() {
       });
 
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error(`Network response was not ok: ${response.status}`);
       }
 
       const data = await response.json();
+      console.log("Chatbot: Received response from /api/chat");
       
       setMessages(prev => [...prev, { text: data.text, isBot: true }]);
       playSynthBeep(600, 0.08);
       
     } catch (err) {
-      console.error('Chat error:', err);
-      setMessages(prev => [...prev, { text: `Sorry, there was an error connecting to our assistant. Please reach us directly on WhatsApp at +268 79375018 or via email at thembelaandrew@gmail.com.`, isBot: true }]);
+      console.error('Chat error in normal mode:', err);
+      // Trigger fallback mode
+      setMessages(prev => [...prev, { text: `I'm having a little trouble connecting to my AI core right now. I'd be happy to connect you with Andrew for more detailed assistance. May I have your name?`, isBot: true }]);
+      setFallbackData(prev => ({ ...prev, message: text }));
+      setChatMode('fallback_name');
       playSynthBeep(200, 0.2, 'square');
     } finally {
       setIsSending(false);
@@ -98,7 +154,7 @@ export default function Chatbot() {
           <div className="p-2.5 rounded-xl bg-brand-electricBlue/5 border border-brand-electricBlue/10 space-y-2 text-slate-300 text-[11px] mb-4">
             <p className="font-bold text-brand-cyanAccent">Contact NexaFlow AI:</p>
             <p>WhatsApp: <strong>+268 79375018</strong></p>
-            <p>Email: <strong>thembelaandrew@gmail.com</strong></p>
+            <p>Email: <strong>andrewtsabedze943@gmail.com</strong></p>
           </div>
 
           {messages.map((msg, i) => (
