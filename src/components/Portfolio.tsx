@@ -1,6 +1,6 @@
 export default function Portfolio() {
   return (
-    <section id="featured-work" className="py-24 relative bg-brand-darkBlue/25 border-y border-slate-800/80">
+    <section id="featured-work" className="py-24 relative bg-transparent border-y border-slate-800/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="text-brand-cyanAccent uppercase tracking-widest text-xs font-bold bg-brand-cyanAccent/10 px-4 py-1.5 rounded-full">Portfolio</span>

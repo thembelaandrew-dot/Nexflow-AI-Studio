@@ -62,7 +62,7 @@ export default function Contact() {
 
   return (
     <>
-      <section id="contact" className="py-24 relative overflow-hidden bg-brand-darkBlue/25 border-t border-slate-800">
+      <section id="contact" className="py-24 relative overflow-hidden bg-transparent border-t border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
           <div className="grid lg:grid-cols-12 gap-12">
             {/* Left Column */}
@@ -196,7 +196,7 @@ export default function Contact() {
         </div>
       </section>
 
-      <section className="py-24 relative overflow-hidden bg-brand-darkBlue/40 border-t border-slate-800">
+      <section className="py-24 relative overflow-hidden bg-transparent border-t border-slate-800">
         <div className="absolute -top-1/2 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-brand-electricBlue/10 rounded-full blur-[120px] pointer-events-none"></div>
         <div className="max-w-4xl mx-auto px-4 sm:px-8 relative z-10 text-center space-y-8">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight">Ready to Grow Your Business?</h2>

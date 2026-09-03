@@ -1,6 +1,6 @@
 {
-  "name": "",
-  "description": "",
+  "name": "NexaFlow AI",
+  "description": "Premium AI & Digital Agency offering high-performance websites, AI solutions, and business automations.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

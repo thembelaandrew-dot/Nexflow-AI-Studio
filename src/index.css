@@ -57,7 +57,7 @@
     color: white;
 }
 body {
-    background-color: var(--color-brand-deep);
+    background-color: transparent;
     color: #f1f5f9;
     font-family: var(--font-sans);
     overflow-x: hidden;

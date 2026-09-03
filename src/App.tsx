@@ -76,20 +76,31 @@ function HomePage() {
 
 import { CurrencyProvider } from './lib/CurrencyContext';
 
+import SmoothScroll from './components/SmoothScroll';
+import CustomCursor from './components/CustomCursor';
+import React, { Suspense } from 'react';
+const Scene3D = React.lazy(() => import('./components/Scene3D'));
+
 export default function App() {
   return (
     <CurrencyProvider>
-      <Router>
-        <ScrollToHashElement />
-        <PointerGlow />
-        <Preloader />
-        
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/portfolio" element={<PortfolioPage />} />
-          <Route path="/portfolio/:id" element={<ProjectPage />} />
-        </Routes>
-      </Router>
+      <SmoothScroll>
+        <Router>
+          <Suspense fallback={<div className="fixed inset-0 z-0 bg-[#02050c]" />}><Scene3D /></Suspense>
+          <ScrollToHashElement />
+          <PointerGlow />
+          <CustomCursor />
+          <Preloader />
+          
+          <div className="relative z-10 w-full flex flex-col">
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/portfolio" element={<PortfolioPage />} />
+              <Route path="/portfolio/:id" element={<ProjectPage />} />
+            </Routes>
+          </div>
+        </Router>
+      </SmoothScroll>
     </CurrencyProvider>
   );
 }

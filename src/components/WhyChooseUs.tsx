@@ -13,7 +13,7 @@ export default function WhyChooseUs() {
   ];
 
   return (
-    <section id="why-choose-us" className="py-24 relative border-t border-slate-800 bg-brand-darkBlue/20">
+    <section id="why-choose-us" className="py-24 relative border-t border-slate-800 bg-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="text-brand-cyanAccent uppercase tracking-widest text-xs font-bold bg-brand-cyanAccent/10 px-4 py-1.5 rounded-full">Core Principles</span>

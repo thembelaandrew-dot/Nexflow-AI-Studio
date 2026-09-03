@@ -182,7 +182,7 @@ export default function Chatbot() {
           <div ref={chatEndRef} />
         </div>
 
-        <div className="p-3 border-t border-slate-800 bg-[#02050c]/80">
+        <div className="p-3 border-t border-slate-800 bg-transparent/80">
           <form className="flex gap-2" onSubmit={handleSend}>
             <input
               type="text"

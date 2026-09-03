@@ -1,196 +1,173 @@
 import { useEffect, useRef } from 'react';
-import { ArrowRight, CheckCircle2, ShieldCheck, TrendingUp, Cpu, Sparkles } from 'lucide-react';
+import { ArrowRight, CheckCircle2, ShieldCheck, TrendingUp, Cpu, Sparkles, Bot } from 'lucide-react';
 import { playSynthBeep } from '../lib/audio';
+import { motion } from 'motion/react';
 
 export default function Hero() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    let points: { x: number; y: number; vx: number; vy: number }[] = [];
-    const numPoints = 50;
-    const maxDist = 120;
-    let animationFrameId: number;
-
-    const initCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      points = [];
-      for (let i = 0; i < numPoints; i++) {
-        points.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.4,
-          vy: (Math.random() - 0.5) * 0.4
-        });
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: { 
+        staggerChildren: 0.1,
+        delayChildren: 0.5
       }
-    };
+    }
+  };
 
-    const animateCanvas = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      for (let i = 0; i < numPoints; i++) {
-        let p = points[i];
-        p.x += p.vx;
-        p.y += p.vy;
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30, filter: 'blur(10px)' },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      filter: 'blur(0px)',
+      transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as any }
+    }
+  };
 
-        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(6, 182, 212, 0.6)';
-        ctx.fill();
-
-        for (let j = i + 1; j < numPoints; j++) {
-          let p2 = points[j];
-          let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
-          if (dist < maxDist) {
-            ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(p2.x, p2.y);
-            let alpha = (1 - dist / maxDist) * 0.15;
-            ctx.strokeStyle = `rgba(59, 130, 246, ${alpha})`;
-            ctx.lineWidth = 1;
-            ctx.stroke();
-          }
-        }
-      }
-      animationFrameId = requestAnimationFrame(animateCanvas);
-    };
-
-    window.addEventListener('resize', initCanvas);
-    initCanvas();
-    animateCanvas();
-
-    return () => {
-      window.removeEventListener('resize', initCanvas);
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, []);
+  const textVariants = {
+    hidden: { opacity: 0, y: 50, rotateX: 45, filter: 'blur(15px)' },
+    visible: {
+      opacity: 1,
+      y: 0,
+      rotateX: 0,
+      filter: 'blur(0px)',
+      transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] as any }
+    }
+  };
 
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-32 pb-20 overflow-hidden px-4 sm:px-8">
-      <canvas ref={canvasRef} className="absolute inset-0 z-0 opacity-30 pointer-events-none" />
-
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-brand-electricBlue/10 blur-[120px] pointer-events-none"></div>
-      <div className="absolute bottom-10 right-10 w-[300px] h-[300px] rounded-full bg-brand-cyanAccent/10 blur-[100px] pointer-events-none"></div>
-
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-12 items-center relative z-10 w-full">
+      {/* Background Gradients - Reduced since we have 3D */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-brand-electricBlue/10 blur-[120px] pointer-events-none mix-blend-screen"></div>
+      
+      <motion.div 
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-12 lg:gap-16 items-center relative z-10 w-full"
+      >
         {/* Left Headline Block */}
-        <div className="lg:col-span-7 flex flex-col text-center lg:text-left items-center lg:items-start space-y-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-electricBlue/10 border border-brand-electricBlue/30 text-xs sm:text-sm font-semibold text-brand-cyanAccent">
+        <div className="lg:col-span-7 flex flex-col text-center lg:text-left items-center lg:items-start space-y-8 relative z-20">
+          <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-electricBlue/10 border border-brand-electricBlue/30 text-xs sm:text-sm font-semibold text-brand-cyanAccent backdrop-blur-md">
             <span className="flex h-2 w-2 relative">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-cyanAccent opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-cyanAccent"></span>
             </span>
-            <span>Modern Digital Strategy</span>
-          </div>
-
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15] text-white">
-            Transform Your Business With <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-electricBlue via-[#60a5fa] to-brand-cyanAccent text-glow">AI-Powered Websites</span>, Automation & Lead Generation
-          </h1>
-
-          <p className="text-base sm:text-lg text-slate-300 max-w-2xl leading-relaxed">
-            We help businesses attract more customers, automate repetitive work, and build a stronger online presence through modern websites and AI solutions.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-            <a href="#contact" className="w-full sm:w-auto px-8 py-4 rounded-full bg-gradient-to-r from-brand-electricBlue to-brand-cyanAccent text-white font-bold hover:shadow-[0_0_25px_rgba(59,130,246,0.4)] hover:-translate-y-0.5 transition-all duration-300 text-center flex items-center justify-center gap-3 group" onClick={() => playSynthBeep(880, 0.1)}>
-              <span>Book Free Consultation</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </a>
-            <a href="#services" className="w-full sm:w-auto px-8 py-4 rounded-full glassmorphism text-slate-200 font-bold hover:bg-white/10 hover:text-white hover:-translate-y-0.5 transition-all duration-300 text-center flex items-center justify-center gap-2 border border-slate-700" onClick={() => playSynthBeep(600, 0.08)}>
-              <span>View Services</span>
-              <Sparkles className="w-5 h-5 text-brand-cyanAccent" />
-            </a>
-          </div>
-
-          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 pt-4 text-slate-400">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-brand-cyanAccent" />
-              <span className="text-sm font-medium">Boutique & Founder-Led</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-brand-cyanAccent" />
-              <span className="text-sm font-medium">Reliable Support & Clean Standards</span>
-            </div>
+            <span>Premium AI & Digital Agency</span>
+          </motion.div>
+          
+          <div className="perspective-1000">
+            <motion.h1 variants={textVariants} className="text-5xl sm:text-6xl lg:text-[5rem] font-extrabold tracking-tight leading-[1.05] text-white">
+              Build Smarter. <br />Automate Faster. <br />
+              <span className="inline-block bg-clip-text text-transparent bg-gradient-to-r from-brand-electricBlue via-[#60a5fa] to-brand-cyanAccent relative">
+                Grow Further.
+                <motion.span 
+                  className="absolute bottom-0 left-0 h-1 bg-brand-cyanAccent rounded-full"
+                  initial={{ width: 0 }}
+                  animate={{ width: '100%' }}
+                  transition={{ delay: 1.5, duration: 1, ease: "easeInOut" }}
+                ></motion.span>
+              </span>
+            </motion.h1>
           </div>
           
-          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-6 w-full">
-            <span className="text-xs text-slate-500 font-bold uppercase tracking-widest w-full text-center lg:text-left mb-1">Quick Links</span>
-            {[
-              { id: 'services', label: 'Services' },
-              { id: 'portfolio-preview', label: 'Featured Work' },
-              { id: 'pricing', label: 'Pricing' },
-              { id: 'referral', label: 'Partner & Earn' },
-              { id: 'faq', label: 'FAQs' }
-            ].map((link) => (
-              <a 
-                key={link.id} 
-                href={`#${link.id}`}
-                className="px-4 py-1.5 rounded-full glassmorphism text-slate-300 text-sm font-semibold border border-white/5 hover:border-brand-electricBlue hover:bg-brand-electricBlue/10 hover:text-white transition-all shadow-sm"
-                onClick={() => playSynthBeep(500, 0.05)}
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
+          <motion.p variants={itemVariants} className="text-base sm:text-lg text-slate-300 max-w-xl leading-relaxed">
+            Nexaflow AI builds high-performance websites, AI solutions and business automations that help modern businesses operate and grow digitally.
+          </motion.p>
+          
+          <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+            <a href="#contact" className="w-full sm:w-auto px-8 py-4 rounded-xl bg-brand-electricBlue text-white font-bold hover:bg-[#2563eb] transition-all duration-300 text-center flex items-center justify-center gap-3 group shadow-[0_0_20px_rgba(59,130,246,0.2)] hover:shadow-[0_0_30px_rgba(59,130,246,0.4)] hover:-translate-y-0.5" onClick={() => playSynthBeep(880, 0.1)}>
+              <span>Start Your Project</span>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </a>
+            <a href="#services" className="w-full sm:w-auto px-8 py-4 rounded-xl glassmorphism text-slate-200 font-bold hover:bg-white/10 hover:text-white transition-all duration-300 text-center flex items-center justify-center gap-2 border border-slate-700 hover:-translate-y-0.5" onClick={() => playSynthBeep(600, 0.08)}>
+              <span>Explore Our Solutions</span>
+              <Sparkles className="w-5 h-5 text-brand-cyanAccent" />
+            </a>
+          </motion.div>
+          
+          <motion.div variants={itemVariants} className="flex flex-wrap items-center justify-center lg:justify-start gap-6 pt-6 text-slate-400">
+            <div className="flex items-center gap-2 group cursor-pointer hover:text-brand-cyanAccent transition-colors">
+              <CheckCircle2 className="w-5 h-5 text-brand-cyanAccent group-hover:scale-110 transition-transform" />
+              <span className="text-sm font-medium">Intelligent Workflows</span>
+            </div>
+            <div className="flex items-center gap-2 group cursor-pointer hover:text-brand-cyanAccent transition-colors">
+              <ShieldCheck className="w-5 h-5 text-brand-cyanAccent group-hover:scale-110 transition-transform" />
+              <span className="text-sm font-medium">Premium Digital Systems</span>
+            </div>
+          </motion.div>
         </div>
 
-        {/* Right Visual Mock Card */}
-        <div className="lg:col-span-5 relative w-full flex justify-center">
-          <div className="w-full max-w-md relative group animate-float">
-            <div className="absolute -inset-1 rounded-[2.5rem] bg-gradient-to-r from-brand-electricBlue to-brand-cyanAccent opacity-20 blur-xl group-hover:opacity-30 transition-opacity duration-500"></div>
+        {/* Right Visual Interactive Block */}
+        <motion.div 
+          variants={itemVariants} 
+          className="lg:col-span-5 relative w-full flex justify-center perspective-[1000px] z-20"
+        >
+          <motion.div 
+            className="w-full max-w-md relative group cursor-pointer"
+            whileHover={{ rotateY: 5, rotateX: -5, scale: 1.02, transition: { type: "spring", stiffness: 300 } }}
+            animate={{ y: [-15, 15, -15] }}
+            transition={{ y: { duration: 6, repeat: Infinity, ease: "easeInOut" } }}
+          >
+            <div className="absolute -inset-1 rounded-[2rem] bg-gradient-to-r from-brand-electricBlue to-brand-cyanAccent opacity-30 blur-2xl group-hover:opacity-50 transition-opacity duration-700"></div>
             
-            <div className="relative glassmorphism rounded-[2rem] border border-white/15 overflow-hidden p-6 shadow-2xl">
-              <div className="flex items-center justify-between mb-6 border-b border-slate-800 pb-4">
+            <div className="relative glassmorphism rounded-3xl border border-white/10 overflow-hidden shadow-[0_30px_50px_rgba(0,0,0,0.5)] backdrop-blur-xl bg-transparent/60">
+              {/* Header */}
+              <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800/80 bg-slate-900/50 backdrop-blur-md">
                 <div className="flex items-center gap-2">
-                  <span className="w-3 h-3 rounded-full bg-red-500/80"></span>
-                  <span className="w-3 h-3 rounded-full bg-yellow-500/80"></span>
-                  <span className="w-3 h-3 rounded-full bg-green-500/80"></span>
+                  <span className="w-3 h-3 rounded-full bg-slate-600"></span>
+                  <span className="w-3 h-3 rounded-full bg-slate-600"></span>
+                  <span className="w-3 h-3 rounded-full bg-slate-600"></span>
                 </div>
-                <span className="text-xs font-mono text-slate-500">nexaflow-system.v1</span>
-              </div>
-
-              {/* Graphical Mock Content */}
-              <div className="glassmorphism p-4 rounded-xl border border-white/10 mb-4 hover:border-brand-cyanAccent/40 transition-colors">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs text-slate-400 uppercase tracking-widest font-semibold">Smart Routing Status</span>
-                  <span className="text-xs text-brand-cyanAccent font-mono bg-brand-cyanAccent/10 px-2 py-0.5 rounded">Active</span>
-                </div>
-                <div className="text-xl font-bold text-white flex items-center gap-2">
-                  <span>+264% Inbound Leads</span>
-                  <TrendingUp className="w-5 h-5 text-brand-cyanAccent animate-pulse" />
+                <div className="flex items-center gap-2 text-xs font-mono text-slate-400 bg-slate-800/50 px-2 py-1 rounded">
+                  <Bot className="w-3.5 h-3.5 text-brand-cyanAccent" />
+                  <span>nexaflow_agent</span>
                 </div>
               </div>
-
-              {/* Terminal Output Mock */}
-              <div className="bg-[#02050c]/90 rounded-xl p-4 border border-white/5 font-mono text-[11px] space-y-2 text-slate-300">
-                <div className="flex items-center justify-between text-brand-electricBlue border-b border-slate-800/60 pb-1.5">
-                  <span>[NexaFlow AI Automations]</span>
-                  <span>Online</span>
+              
+              {/* Content */}
+              <div className="p-6 space-y-5">
+                {/* Visual block 1 */}
+                <div className="flex items-center justify-between bg-slate-900/60 p-4 rounded-2xl border border-slate-800/50 hover:border-brand-cyanAccent/50 transition-colors">
+                  <div>
+                    <span className="block text-[10px] text-slate-400 uppercase tracking-widest font-semibold mb-1">Incoming Lead</span>
+                    <span className="text-sm font-medium text-white flex items-center gap-2">
+                      New Project Request <span className="relative flex h-2 w-2"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span><span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span></span>
+                    </span>
+                  </div>
+                  <TrendingUp className="w-5 h-5 text-green-400" />
                 </div>
-                <p className="text-slate-500">&gt; running system integrations...</p>
-                <p className="text-brand-cyanAccent">✓ Live connection verified</p>
-                <p className="text-slate-400">&gt; executing user workflow sequence...</p>
-                <p className="text-green-400">✓ CRM & WhatsApp automations routing correctly</p>
-                <div className="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden mt-2">
-                  <div className="h-full bg-gradient-to-r from-brand-electricBlue to-brand-cyanAccent w-3/4 animate-pulse"></div>
+                
+                {/* Visual block 2 - Terminal */}
+                <div className="bg-[#010206]/80 rounded-2xl p-4 border border-slate-800/50 font-mono text-xs space-y-2 text-slate-300">
+                  <p className="text-slate-500">~ ❯ system init --auto</p>
+                  <p className="text-brand-electricBlue">Evaluating request parameters...</p>
+                  <p className="text-brand-cyanAccent">✓ Routing to appropriate team</p>
+                  <p className="text-green-400">✓ Generating optimal strategy</p>
+                  <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden mt-3">
+                    <motion.div 
+                      className="h-full bg-gradient-to-r from-brand-electricBlue to-brand-cyanAccent"
+                      initial={{ width: "0%" }}
+                      animate={{ width: "100%" }}
+                      transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <div className="absolute -bottom-6 -right-6 glassmorphism w-16 h-16 rounded-2xl flex items-center justify-center border border-brand-cyanAccent/50 shadow-lg text-brand-cyanAccent">
-                <Cpu className="w-8 h-8 animate-spin-slow" />
+                {/* Floating Icon */}
+                <motion.div 
+                  className="absolute -bottom-6 -right-6 w-24 h-24 glassmorphism rounded-3xl flex items-center justify-center border border-brand-cyanAccent/40 shadow-[0_0_30px_rgba(6,182,212,0.2)] bg-slate-900/90 text-brand-cyanAccent backdrop-blur-xl"
+                  animate={{ rotate: [0, 5, 0, -5, 0], scale: [1, 1.05, 1] }}
+                  transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+                >
+                  <Cpu className="w-10 h-10" />
+                </motion.div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
+          </motion.div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

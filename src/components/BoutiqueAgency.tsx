@@ -2,7 +2,7 @@ import { PhoneCall, Zap, Smile, Shield } from 'lucide-react';
 
 export default function BoutiqueAgency() {
   return (
-    <section className="py-24 relative border-t border-slate-800 bg-brand-deep">
+    <section className="py-24 relative border-t border-slate-800 bg-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
         <div className="grid lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-5 space-y-6">
