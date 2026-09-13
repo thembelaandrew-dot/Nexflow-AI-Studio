@@ -67,7 +67,7 @@ export default function Header() {
             </div>
             
             <a href="/#contact" className="hidden sm:inline-flex items-center gap-2 text-xs uppercase tracking-wider font-bold bg-gradient-to-r from-brand-electricBlue to-brand-cyanAccent hover:from-brand-cyanAccent hover:to-brand-electricBlue text-white px-5 py-3 rounded-full shadow-lg hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all duration-300" onClick={() => playSynthBeep(880, 0.12)}>
-              <span>Consultation</span>
+              <span>Discuss Project</span>
               <ArrowRight className="w-4 h-4" />
             </a>
             <button className="lg:hidden glassmorphism p-2 rounded-lg hover:bg-white/10 text-slate-200" onClick={() => { playSynthBeep(500, 0.08); setDrawerOpen(true); }}>
@@ -130,7 +130,7 @@ export default function Header() {
         <div className="mt-auto space-y-4">
           <a href="/#contact" className="w-full py-3.5 bg-gradient-to-r from-brand-electricBlue to-brand-cyanAccent text-center rounded-xl font-bold flex items-center justify-center gap-2 text-white shadow-lg" onClick={() => { playSynthBeep(880, 0.12); closeDrawer(); }}>
             <Calendar className="w-5 h-5" />
-            <span>Book Consultation</span>
+            <span>Discuss Your Project</span>
           </a>
           <div className="text-center text-xs text-slate-500">
             NexaFlow AI &bull; +268 79375018

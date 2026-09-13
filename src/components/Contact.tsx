@@ -68,7 +68,7 @@ export default function Contact() {
             {/* Left Column */}
             <div className="lg:col-span-5 space-y-8">
               <div>
-                <span className="text-brand-cyanAccent uppercase tracking-widest text-xs font-bold bg-brand-cyanAccent/10 px-4 py-1.5 rounded-full">Consultation</span>
+                <span className="text-brand-cyanAccent uppercase tracking-widest text-xs font-bold bg-brand-cyanAccent/10 px-4 py-1.5 rounded-full">Project Inquiry</span>
                 <h2 className="text-3xl sm:text-4xl font-extrabold mt-4 text-white">Let's Discuss Your Project</h2>
                 <p className="text-slate-400 mt-2">Get in touch to arrange an initial review and discuss digital options for your organization.</p>
               </div>
@@ -116,7 +116,7 @@ export default function Contact() {
               <div className="glassmorphism p-8 rounded-3xl border border-white/10 shadow-2xl space-y-8">
                 <div>
                   <p className="text-xs text-brand-cyanAccent font-semibold uppercase tracking-wider mb-2">Ready to discuss your project?</p>
-                  <h3 className="text-xl font-bold text-white mb-2">Reach out directly through WhatsApp or schedule a consultation.</h3>
+                  <h3 className="text-xl font-bold text-white mb-2">Reach out directly through WhatsApp or start a conversation.</h3>
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-4">
@@ -126,7 +126,7 @@ export default function Contact() {
                   </a>
                   <a href="#contact" className="flex-1 py-4 px-6 rounded-xl bg-gradient-to-r from-brand-electricBlue to-brand-cyanAccent text-white font-bold text-center flex items-center justify-center gap-2 hover:opacity-90 hover:scale-102 transition-all shadow-[0_0_20px_rgba(59,130,246,0.2)]" onClick={() => playSynthBeep(650, 0.1)}>
                     <Calendar className="w-5 h-5" />
-                    <span>Book Consultation</span>
+                    <span>Discuss Your Project</span>
                   </a>
                 </div>
 
@@ -205,7 +205,7 @@ export default function Contact() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a href="#contact" className="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-brand-electricBlue to-brand-cyanAccent text-white font-bold shadow-lg hover:opacity-90 hover:scale-102 transition-all text-center" onClick={() => playSynthBeep(880, 0.1)}>
-              Book Consultation
+              Start a Conversation
             </a>
             <a href="https://wa.me/26879375018?text=Hi%20I%20would%20like%20to%20work%20with%20Nexaflow%20AI" target="_blank" className="w-full sm:w-auto px-8 py-4 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white font-bold flex items-center justify-center gap-2 hover:scale-102 transition-all text-center" onClick={() => playSynthBeep(600, 0.08)}>
               <Phone className="w-5 h-5 text-green-400" />

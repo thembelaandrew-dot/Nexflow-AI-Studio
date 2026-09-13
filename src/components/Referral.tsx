@@ -11,10 +11,10 @@ export default function Referral() {
     { icon: <Wallet className="w-6 h-6 text-brand-cyanAccent" />, title: "3. Earn", desc: "Get paid a generous commission for every successful referral." }
   ];
   const commissions = [
-    { service: "Landing Page", price: 27, earn: 3 },
-    { service: "Starter Website", price: 80, earn: 11 },
-    { service: "Business Website", price: 190, earn: 27 },
-    { service: "Website + AI Automation", price: 325, earn: 50 },
+    { service: "Landing Page", price: 135, earn: 14 },
+    { service: "Starter Website", price: 216, earn: 22 },
+    { service: "Business Website", price: 324, earn: 32 },
+    { service: "Website + Automation", price: 540, earn: 54 },
   ];
   
   return (

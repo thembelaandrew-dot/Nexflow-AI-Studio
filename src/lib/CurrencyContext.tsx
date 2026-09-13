@@ -69,12 +69,19 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
 
     // Special rounding to match original exact pricing for ZAR/SZL
     if (currency === 'ZAR' || currency === 'SZL') {
-      if (usdPrice === 27) return `${symbols[currency]}500`;
-      if (usdPrice === 80) return `${symbols[currency]}1,500`;
-      if (usdPrice === 190) return `${symbols[currency]}3,500`;
-      if (usdPrice === 325) return `${symbols[currency]}6,000`;
-      if (usdPrice === 3) return `${symbols[currency]}50`;
-      if (usdPrice === 50) return `${symbols[currency]}900`;
+      if (usdPrice === 135) return `${symbols[currency]}2,500`;
+      if (usdPrice === 216) return `${symbols[currency]}4,000`;
+      if (usdPrice === 324) return `${symbols[currency]}6,000`;
+      if (usdPrice === 540) return `${symbols[currency]}10,000`;
+      if (usdPrice === 810) return `${symbols[currency]}15,000`;
+      if (usdPrice === 1081) return `${symbols[currency]}20,000`;
+      if (usdPrice === 1621) return `${symbols[currency]}30,000`;
+      
+      // Commissions
+      if (usdPrice === 14) return `${symbols[currency]}250`;
+      if (usdPrice === 22) return `${symbols[currency]}400`;
+      if (usdPrice === 32) return `${symbols[currency]}600`;
+      if (usdPrice === 54) return `${symbols[currency]}1,000`;
       
       // generic rounding
       converted = Math.round(converted / 50) * 50;

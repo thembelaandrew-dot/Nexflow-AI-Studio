@@ -23,8 +23,6 @@ import PointerGlow from './components/PointerGlow';
 import Preloader from './components/Preloader';
 import ScrollToTop from './components/ScrollToTop';
 import Chatbot from './components/Chatbot';
-import LeadPopup from './components/LeadPopup';
-
 import PortfolioPage from './pages/PortfolioPage';
 import ProjectPage from './pages/ProjectPage';
 
@@ -68,7 +66,6 @@ function HomePage() {
       <Footer />
       
       <Chatbot />
-      <LeadPopup />
       <ScrollToTop />
     </>
   );
@@ -79,7 +76,7 @@ import { CurrencyProvider } from './lib/CurrencyContext';
 import SmoothScroll from './components/SmoothScroll';
 import CustomCursor from './components/CustomCursor';
 import React, { Suspense } from 'react';
-const Scene3D = React.lazy(() => import('./components/Scene3D'));
+const Scene3D = React.lazy(() => import('./components/Nexaflow3D'));
 
 export default function App() {
   return (

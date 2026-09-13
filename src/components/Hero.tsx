@@ -10,7 +10,7 @@ export default function Hero() {
       opacity: 1,
       transition: { 
         staggerChildren: 0.1,
-        delayChildren: 0.5
+        delayChildren: 1.5
       }
     }
   };
@@ -99,74 +99,8 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* Right Visual Interactive Block */}
-        <motion.div 
-          variants={itemVariants} 
-          className="lg:col-span-5 relative w-full flex justify-center perspective-[1000px] z-20"
-        >
-          <motion.div 
-            className="w-full max-w-md relative group cursor-pointer"
-            whileHover={{ rotateY: 5, rotateX: -5, scale: 1.02, transition: { type: "spring", stiffness: 300 } }}
-            animate={{ y: [-15, 15, -15] }}
-            transition={{ y: { duration: 6, repeat: Infinity, ease: "easeInOut" } }}
-          >
-            <div className="absolute -inset-1 rounded-[2rem] bg-gradient-to-r from-brand-electricBlue to-brand-cyanAccent opacity-30 blur-2xl group-hover:opacity-50 transition-opacity duration-700"></div>
-            
-            <div className="relative glassmorphism rounded-3xl border border-white/10 overflow-hidden shadow-[0_30px_50px_rgba(0,0,0,0.5)] backdrop-blur-xl bg-transparent/60">
-              {/* Header */}
-              <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800/80 bg-slate-900/50 backdrop-blur-md">
-                <div className="flex items-center gap-2">
-                  <span className="w-3 h-3 rounded-full bg-slate-600"></span>
-                  <span className="w-3 h-3 rounded-full bg-slate-600"></span>
-                  <span className="w-3 h-3 rounded-full bg-slate-600"></span>
-                </div>
-                <div className="flex items-center gap-2 text-xs font-mono text-slate-400 bg-slate-800/50 px-2 py-1 rounded">
-                  <Bot className="w-3.5 h-3.5 text-brand-cyanAccent" />
-                  <span>nexaflow_agent</span>
-                </div>
-              </div>
-              
-              {/* Content */}
-              <div className="p-6 space-y-5">
-                {/* Visual block 1 */}
-                <div className="flex items-center justify-between bg-slate-900/60 p-4 rounded-2xl border border-slate-800/50 hover:border-brand-cyanAccent/50 transition-colors">
-                  <div>
-                    <span className="block text-[10px] text-slate-400 uppercase tracking-widest font-semibold mb-1">Incoming Lead</span>
-                    <span className="text-sm font-medium text-white flex items-center gap-2">
-                      New Project Request <span className="relative flex h-2 w-2"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span><span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span></span>
-                    </span>
-                  </div>
-                  <TrendingUp className="w-5 h-5 text-green-400" />
-                </div>
-                
-                {/* Visual block 2 - Terminal */}
-                <div className="bg-[#010206]/80 rounded-2xl p-4 border border-slate-800/50 font-mono text-xs space-y-2 text-slate-300">
-                  <p className="text-slate-500">~ ❯ system init --auto</p>
-                  <p className="text-brand-electricBlue">Evaluating request parameters...</p>
-                  <p className="text-brand-cyanAccent">✓ Routing to appropriate team</p>
-                  <p className="text-green-400">✓ Generating optimal strategy</p>
-                  <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden mt-3">
-                    <motion.div 
-                      className="h-full bg-gradient-to-r from-brand-electricBlue to-brand-cyanAccent"
-                      initial={{ width: "0%" }}
-                      animate={{ width: "100%" }}
-                      transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
-                    />
-                  </div>
-                </div>
-
-                {/* Floating Icon */}
-                <motion.div 
-                  className="absolute -bottom-6 -right-6 w-24 h-24 glassmorphism rounded-3xl flex items-center justify-center border border-brand-cyanAccent/40 shadow-[0_0_30px_rgba(6,182,212,0.2)] bg-slate-900/90 text-brand-cyanAccent backdrop-blur-xl"
-                  animate={{ rotate: [0, 5, 0, -5, 0], scale: [1, 1.05, 1] }}
-                  transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-                >
-                  <Cpu className="w-10 h-10" />
-                </motion.div>
-              </div>
-            </div>
-          </motion.div>
-        </motion.div>
+        {/* Right empty space for 3D core negative space */}
+        <div className="lg:col-span-5 hidden lg:block pointer-events-none"></div>
       </motion.div>
     </section>
   );
