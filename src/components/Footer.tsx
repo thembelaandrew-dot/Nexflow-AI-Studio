@@ -3,7 +3,7 @@ import { playSynthBeep } from '../lib/audio';
 
 export default function Footer() {
   return (
-    <footer className="bg-transparent pt-24 pb-8 border-t border-white/5 relative overflow-hidden">
+    <footer className="bg-nexa-deep pt-24 pb-8 border-t border-white/5 relative overflow-hidden">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-px bg-gradient-to-r from-transparent via-brand-electricBlue/30 to-transparent"></div>
       
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
@@ -30,10 +30,10 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-12 gap-12 lg:gap-8 mb-16">
           <div className="col-span-2 md:col-span-4 lg:col-span-4 space-y-6">
             <a href="#" className="inline-block" onClick={() => playSynthBeep(600, 0.1)}>
-              <img src="https://i.imgur.com/DftcbVu.jpeg" alt="NexaFlow AI Logo" className="h-10 w-auto object-contain rounded opacity-90 hover:opacity-100 transition-opacity" onError={(e) => { e.currentTarget.outerHTML = "<span class='text-2xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-brand-electricBlue'>NexaFlow AI</span>"; }} />
+              <img src="https://i.imgur.com/DftcbVu.jpeg" alt="Nexaflow AI - AI Automation and Website Development Agency" className="h-10 w-auto object-contain rounded opacity-90 hover:opacity-100 transition-opacity" loading="lazy" width="200" height="40" onError={(e) => { e.currentTarget.outerHTML = "<span class='text-2xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-brand-electricBlue'>Nexaflow AI</span>"; }} />
             </a>
             <p className="text-sm text-slate-400 leading-relaxed max-w-sm">
-              NexaFlow AI builds high-performance websites, AI solutions, and business automations that help modern businesses operate and grow digitally.
+              Nexaflow AI is a premier AI and Digital agency providing custom website development, AI chatbots, and workflow automation services across Eswatini, Africa, and worldwide.
             </p>
             <div className="flex items-center gap-3 pt-2">
               <a href="https://wa.me/26879375018?text=Hi%20I%20would%20like%20to%20work%20with%20Nexaflow%20AI" target="_blank" className="p-2.5 bg-white/5 border border-white/10 rounded-lg text-slate-400 hover:text-green-400 hover:bg-white/10 hover:border-white/20 transition-all" onClick={() => playSynthBeep(450, 0.05)}>
@@ -84,7 +84,7 @@ export default function Footer() {
         </div>
         
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-          <p>&copy; {new Date().getFullYear()} NexaFlow AI. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Nexaflow AI. All rights reserved.</p>
           <div className="flex items-center gap-6">
             <a href="#" className="hover:text-slate-300 transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-slate-300 transition-colors">Terms of Service</a>

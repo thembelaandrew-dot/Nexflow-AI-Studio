@@ -57,7 +57,7 @@ export default function Portfolio() {
 
         <div className="text-center mt-12">
           <p className="text-xs text-slate-500 italic">
-            Additional client projects and case studies will continue to be added as NexaFlow AI expands its portfolio and services.
+            Additional client projects and case studies will continue to be added as Nexaflow AI expands its portfolio and services.
           </p>
         </div>
       </div>

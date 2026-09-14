@@ -8,6 +8,13 @@
   --color-brand-cyanAccent: #06b6d4;
   --color-brand-glowBlue: rgba(59, 130, 246, 0.15);
   
+  --color-nexa-deep: #02050c;
+  --color-nexa-dark-blue: #09101d;
+  --color-nexa-blue-gray: #0f172a;
+  --color-nexa-cool-gray: #1e293b;
+  --color-nexa-surface: #334155;
+  --color-nexa-light-blue: #f1f5f9;
+
   --font-sans: 'Plus Jakarta Sans', 'Inter', sans-serif;
 
   --animate-pulse-slow: pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;

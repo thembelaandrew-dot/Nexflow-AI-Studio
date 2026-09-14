@@ -1,6 +1,7 @@
 import { User, Globe, Bot, UserCheck, Database, MessageSquare } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { useRef } from 'react';
+import CinematicBackgroundVideo from './CinematicBackgroundVideo';
 
 const WorkflowNode = ({ 
   icon: Icon, 
@@ -49,7 +50,18 @@ export default function OurProcess() {
   const lineHeight = useTransform(scrollYProgress, [0, 0.8], ["0%", "100%"]);
 
   return (
-    <section id="process" className="py-32 relative bg-transparent overflow-hidden" ref={containerRef}>
+    <section id="process" className="py-32 relative bg-nexa-deep overflow-hidden border-t border-slate-800" ref={containerRef}>
+      <CinematicBackgroundVideo
+        mp4Src="https://res.cloudinary.com/utmx65fl/video/upload/v1789379494/nexaflow-hero-bg-loop-1.mp4"
+        webmSrc="https://res.cloudinary.com/utmx65fl/video/upload/v1789379494/nexaflow-hero-bg-loop-1.webm"
+        posterSrc="https://res.cloudinary.com/utmx65fl/video/upload/v1789379494/nexaflow-hero-bg-loop-1.jpg"
+        variant="section"
+        topFade={true}
+        bottomFade={true}
+        vignette={true}
+        overlayOpacity={0.7}
+      />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-brand-electricBlue/5 via-transparent to-transparent pointer-events-none"></div>
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <motion.div 
           initial={{ opacity: 0, y: 30 }}

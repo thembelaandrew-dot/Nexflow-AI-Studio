@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { ArrowRight, CheckCircle2, ShieldCheck, TrendingUp, Cpu, Sparkles, Bot } from 'lucide-react';
 import { playSynthBeep } from '../lib/audio';
 import { motion } from 'motion/react';
+import CinematicHeroVideo from './CinematicHeroVideo';
 
 export default function Hero() {
   const containerVariants = {
@@ -37,9 +38,11 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center pt-32 pb-20 overflow-hidden px-4 sm:px-8">
+    <section id="hero" className="relative min-h-screen flex items-center justify-center pt-32 pb-20 overflow-hidden px-4 sm:px-8">
+      <CinematicHeroVideo />
+      
       {/* Background Gradients - Reduced since we have 3D */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-brand-electricBlue/10 blur-[120px] pointer-events-none mix-blend-screen"></div>
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-brand-electricBlue/10 blur-[120px] pointer-events-none mix-blend-screen z-0"></div>
       
       <motion.div 
         variants={containerVariants}
@@ -59,9 +62,9 @@ export default function Hero() {
           
           <div className="perspective-1000">
             <motion.h1 variants={textVariants} className="text-5xl sm:text-6xl lg:text-[5rem] font-extrabold tracking-tight leading-[1.05] text-white">
-              Build Smarter. <br />Automate Faster. <br />
+              AI Automation. <br />Custom Websites. <br />
               <span className="inline-block bg-clip-text text-transparent bg-gradient-to-r from-brand-electricBlue via-[#60a5fa] to-brand-cyanAccent relative">
-                Grow Further.
+                Digital Transformation.
                 <motion.span 
                   className="absolute bottom-0 left-0 h-1 bg-brand-cyanAccent rounded-full"
                   initial={{ width: 0 }}
@@ -73,7 +76,7 @@ export default function Hero() {
           </div>
           
           <motion.p variants={itemVariants} className="text-base sm:text-lg text-slate-300 max-w-xl leading-relaxed">
-            Nexaflow AI builds high-performance websites, AI solutions and business automations that help modern businesses operate and grow digitally.
+            Nexaflow AI is Africa's premier AI agency delivering workflow automation, custom websites, and AI chatbots that help modern businesses scale worldwide.
           </motion.p>
           
           <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">

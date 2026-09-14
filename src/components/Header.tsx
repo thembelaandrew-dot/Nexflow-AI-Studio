@@ -30,10 +30,12 @@ export default function Header() {
           <Link to="/" className="flex items-center gap-3 group" onClick={() => playSynthBeep(600, 0.1)}>
             <img
               src="https://i.imgur.com/DftcbVu.jpeg"
-              alt="NexaFlow AI Logo"
+              alt="Nexaflow AI - African AI & Website Development Agency"
+              width="200"
+              height="48"
               className="h-10 sm:h-12 w-auto object-contain rounded-lg shadow-md transition-transform duration-300 group-hover:scale-102"
               onError={(e) => {
-                e.currentTarget.outerHTML = `<div class='glassmorphism px-3 py-1.5 rounded-lg flex items-center gap-2 border border-brand-cyanAccent/50'><div class='w-3 h-3 rounded-full bg-brand-electricBlue animate-pulse'></div><span class='font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-brand-electricBlue'>NexaFlow AI</span></div>`;
+                e.currentTarget.outerHTML = `<div class='glassmorphism px-3 py-1.5 rounded-lg flex items-center gap-2 border border-brand-cyanAccent/50'><div class='w-3 h-3 rounded-full bg-brand-electricBlue animate-pulse'></div><span class='font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-brand-electricBlue'>Nexaflow AI</span></div>`;
               }}
             />
           </Link>
@@ -133,7 +135,7 @@ export default function Header() {
             <span>Discuss Your Project</span>
           </a>
           <div className="text-center text-xs text-slate-500">
-            NexaFlow AI &bull; +268 79375018
+            Nexaflow AI &bull; +268 79375018
           </div>
         </div>
       </div>

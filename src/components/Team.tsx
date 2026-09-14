@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 
 export default function Team() {
   return (
-    <section id="team" className="py-24 relative bg-transparent border-t border-white/5 overflow-hidden">
+    <section id="team" className="py-24 relative bg-nexa-dark-blue border-t border-white/5 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
         <div className="grid lg:grid-cols-12 gap-12 items-center">
           
@@ -18,7 +18,7 @@ export default function Team() {
               <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-brand-electricBlue to-brand-cyanAccent opacity-25 blur-xl group-hover:opacity-35 transition-all"></div>
               
               <div className="relative rounded-2xl overflow-hidden aspect-[4/5] bg-slate-900 border border-slate-700">
-                <img src="https://i.imgur.com/AfBbkKJ.jpeg" alt="Andrew Tsabedze Founder of NexaFlow AI" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" loading="lazy" />
+                <img src="https://i.imgur.com/AfBbkKJ.jpeg" alt="Andrew Tsabedze Founder of Nexaflow AI" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" loading="lazy" />
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-deep via-brand-deep/20 to-transparent"></div>
                 
                 <div className="absolute bottom-6 left-6 right-6">
@@ -38,11 +38,11 @@ export default function Team() {
           >
             <div>
               <span className="text-brand-cyanAccent uppercase tracking-widest text-xs font-bold bg-brand-cyanAccent/10 px-4 py-1.5 rounded-full">Who You'll Work With</span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold mt-4 text-white">A Reliable Boutique Agency Experience</h2>
+              <h2 className="text-3xl sm:text-4xl font-extrabold mt-4 text-white">A Reliable Boutique AI Agency Experience</h2>
             </div>
             
             <p className="text-slate-300 leading-relaxed text-base">
-              At NexaFlow AI, clients work directly with the people responsible for planning, building, and supporting their projects. This ensures clear communication, personalized service, and accountability throughout every stage of development.
+              As an established AI Agency in Africa based in Eswatini, clients work directly with the experts responsible for planning, building, and supporting their projects. This ensures clear communication, personalized service, and accountability for every custom website and automation system we deliver.
             </p>
             
             <div className="grid sm:grid-cols-2 gap-6 pt-4">
@@ -83,7 +83,7 @@ export default function Team() {
                   <Eye className="w-5 h-5" />
                   <span className="font-extrabold text-sm uppercase tracking-wide text-white">Our Vision</span>
                 </div>
-                <p className="text-xs text-slate-400 leading-relaxed">To establish NexaFlow AI as a highly trusted boutique partner for modern digital design and automation.</p>
+                <p className="text-xs text-slate-400 leading-relaxed">To establish Nexaflow AI as a highly trusted boutique partner for modern digital design and automation.</p>
               </motion.div>
             </div>
           </motion.div>

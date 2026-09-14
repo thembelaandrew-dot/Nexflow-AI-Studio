@@ -25,6 +25,9 @@ import ScrollToTop from './components/ScrollToTop';
 import Chatbot from './components/Chatbot';
 import PortfolioPage from './pages/PortfolioPage';
 import ProjectPage from './pages/ProjectPage';
+import { CurrencyProvider } from './lib/CurrencyContext';
+import SmoothScroll from './components/SmoothScroll';
+import CustomCursor from './components/CustomCursor';
 
 function ScrollToHashElement() {
   const { hash, pathname } = useLocation();
@@ -71,19 +74,11 @@ function HomePage() {
   );
 }
 
-import { CurrencyProvider } from './lib/CurrencyContext';
-
-import SmoothScroll from './components/SmoothScroll';
-import CustomCursor from './components/CustomCursor';
-import React, { Suspense } from 'react';
-const Scene3D = React.lazy(() => import('./components/Nexaflow3D'));
-
 export default function App() {
   return (
     <CurrencyProvider>
       <SmoothScroll>
         <Router>
-          <Suspense fallback={<div className="fixed inset-0 z-0 bg-[#02050c]" />}><Scene3D /></Suspense>
           <ScrollToHashElement />
           <PointerGlow />
           <CustomCursor />

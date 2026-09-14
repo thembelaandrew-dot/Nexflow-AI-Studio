@@ -137,7 +137,8 @@ export default function Pricing() {
   ];
 
   return (
-    <section id="pricing" className="py-32 relative bg-[#02050c] overflow-hidden">
+    <section id="pricing" className="py-32 relative bg-nexa-deep overflow-hidden">
+      <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-nexa-light-blue to-transparent pointer-events-none z-0"></div>
       <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10 space-y-32">
         
         {/* Header */}
@@ -149,9 +150,9 @@ export default function Pricing() {
           className="text-center max-w-3xl mx-auto"
         >
           <span className="text-brand-electricBlue uppercase tracking-widest text-xs font-bold bg-brand-electricBlue/10 px-4 py-1.5 rounded-full border border-brand-electricBlue/20 backdrop-blur-md">Professional Solutions</span>
-          <h2 className="text-4xl md:text-5xl font-extrabold mt-6 text-white tracking-tight">Standard <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-electricBlue to-brand-cyanAccent">Web Development</span></h2>
+          <h2 className="text-4xl md:text-5xl font-extrabold mt-6 text-white tracking-tight">Website Development & <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-electricBlue to-brand-cyanAccent">AI Automation</span></h2>
           <p className="text-slate-400 mt-4 text-lg">
-            From professional business websites to AI-powered automation and immersive digital experiences.
+            From professional business websites to AI chatbots, automation systems, and immersive digital experiences in Eswatini and globally.
           </p>
         </motion.div>
 
@@ -239,12 +240,16 @@ export default function Pricing() {
                 key={idx} 
                 variants={itemVariants}
                 whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                className="glassmorphism p-8 rounded-3xl flex flex-col justify-between transition-all duration-300 relative group backdrop-blur-xl border border-white/10 hover:border-brand-cyanAccent/40 bg-gradient-to-b from-slate-900/80 to-[#02050c]/90"
+                className="glassmorphism p-8 rounded-3xl flex flex-col justify-between transition-all duration-300 relative group backdrop-blur-xl border border-brand-cyanAccent/30 hover:border-emerald-400/60 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] bg-gradient-to-b from-[#06b6d4]/10 to-[#02050c]/90"
               >
-                <div>
-                  <h3 className="text-xl font-bold text-slate-100">{plan.name}</h3>
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/5 to-brand-cyanAccent/5 rounded-3xl pointer-events-none"></div>
+                <div className="relative z-10">
+                  <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-emerald-400" />
+                    {plan.name}
+                  </h3>
                   <div className="mt-4 flex flex-col">
-                    <span className="text-xs text-slate-500 uppercase tracking-widest font-semibold mb-1">From</span>
+                    <span className="text-xs text-brand-cyanAccent uppercase tracking-widest font-semibold mb-1">From</span>
                     <div className="flex items-baseline gap-2">
                       <span className="text-4xl font-extrabold text-white">{formatPrice(plan.price)}{plan.isPlus ? '+' : ''}</span>
                     </div>
@@ -254,19 +259,19 @@ export default function Pricing() {
                   </p>
                 </div>
                 
-                <ul className="space-y-4 border-t border-slate-700/80 pt-6 mt-8">
+                <ul className="space-y-4 border-t border-brand-cyanAccent/20 pt-6 mt-8 relative z-10">
                   {plan.features.map((feature, i) => (
                     <li key={i} className="flex items-start gap-3 text-sm text-slate-200">
-                      <Sparkles className="w-4 h-4 mt-0.5 text-brand-cyanAccent shrink-0" />
+                      <Check className="w-4 h-4 mt-0.5 text-emerald-400 shrink-0" />
                       <span>{feature}</span>
                     </li>
                   ))}
                 </ul>
                 
-                <div className="mt-10 pt-6 border-t border-slate-700/80">
+                <div className="mt-10 pt-6 border-t border-brand-cyanAccent/20 relative z-10">
                   <a 
                     href="#contact" 
-                    className="block w-full text-center py-4 font-bold rounded-xl transition-all text-sm bg-brand-cyanAccent/10 hover:bg-brand-cyanAccent hover:text-black border border-brand-cyanAccent/30 text-brand-cyanAccent hover:shadow-[0_0_20px_rgba(6,182,212,0.3)]"
+                    className="block w-full text-center py-4 font-bold rounded-xl transition-all text-sm bg-gradient-to-r from-emerald-500 to-brand-cyanAccent hover:opacity-90 hover:scale-[1.02] text-black shadow-[0_0_20px_rgba(6,182,212,0.3)]"
                     onClick={() => playSynthBeep(880, 0.1)}
                   >
                     Request a Project Discussion

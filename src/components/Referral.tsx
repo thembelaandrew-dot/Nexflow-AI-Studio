@@ -18,7 +18,7 @@ export default function Referral() {
   ];
   
   return (
-    <section id="referral" className="py-24 relative overflow-hidden bg-transparent">
+    <section id="referral" className="py-24 relative overflow-hidden bg-nexa-deep">
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-brand-electricBlue/20 to-transparent"></div>
       
       <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -149,7 +149,7 @@ export default function Referral() {
             <li>Referral commission is paid only after payment has been confirmed.</li>
             <li>The client must mention the referral ID or referral name <strong className="text-white">before</strong> making payment.</li>
             <li>Fraudulent or self-referrals are not accepted.</li>
-            <li>NexaFlow AI reserves the right to verify referrals and adjust terms if necessary.</li>
+            <li>Nexaflow AI reserves the right to verify referrals and adjust terms if necessary.</li>
           </ul>
         </motion.div>
       </div>

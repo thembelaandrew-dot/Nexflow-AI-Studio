@@ -161,57 +161,86 @@ export function NexaflowCore() {
 
       // Material properties change on scroll
       if (materialRef.current) {
-        // As you scroll down, it becomes more distorted/liquid
-        materialRef.current.distortion = THREE.MathUtils.lerp(0.5, 1.8 * motionMultiplier, scrollInfluence);
-        materialRef.current.thickness = THREE.MathUtils.lerp(2.5, 4.0, scrollInfluence);
-        materialRef.current.chromaticAberration = THREE.MathUtils.lerp(0.8, 1.5 * motionMultiplier, scrollInfluence);
+        if (Global3DState.quality === 'high') {
+          // As you scroll down, it becomes more distorted/liquid on high tier
+          materialRef.current.distortion = THREE.MathUtils.lerp(0.5, 1.8 * motionMultiplier, scrollInfluence);
+          materialRef.current.thickness = THREE.MathUtils.lerp(2.5, 4.0, scrollInfluence);
+          materialRef.current.chromaticAberration = THREE.MathUtils.lerp(0.8, 1.5 * motionMultiplier, scrollInfluence);
+        } else {
+          // Standard meshPhysicalMaterial properties on low and medium tiers (no offscreen render pass)
+          materialRef.current.roughness = THREE.MathUtils.lerp(
+            Global3DState.quality === 'medium' ? 0.15 : 0.25,
+            Global3DState.quality === 'medium' ? 0.25 : 0.35,
+            scrollInfluence
+          );
+        }
       }
     }
   });
 
-  const isLowQuality = Global3DState.quality === 'low';
+  const quality = Global3DState.quality;
+  // Detail levels: high=32, medium=16, low=8 (reduced from 64/16)
+  const detail = quality === 'high' ? 32 : quality === 'medium' ? 16 : 8;
+  const innerDetail = quality === 'high' ? 24 : quality === 'medium' ? 16 : 8;
 
   return (
     <group ref={groupRef}>
-      {/* Outer Premium Nexaflow Core (Refractive Glass) */}
+      {/* Outer Premium Nexaflow Core (Refractive Glass on High tier; cheap meshPhysicalMaterial on Low/Med) */}
       <mesh ref={outerMeshRef}>
-        <icosahedronGeometry args={[1, isLowQuality ? 16 : 64]} />
-        <MeshTransmissionMaterial
-          ref={materialRef}
-          onBeforeCompile={onBeforeCompile}
-          backside
-          samples={isLowQuality ? 2 : 6} 
-          resolution={isLowQuality ? 128 : 1024}
-          thickness={2.5}
-          roughness={0.1}
-          transmission={1}
-          ior={1.3}
-          chromaticAberration={0.8}
-          anisotropy={0.3}
-          distortion={1.0}
-          distortionScale={0.3}
-          temporalDistortion={0.2}
-          iridescence={1.2}
-          iridescenceIOR={1.1}
-          iridescenceThicknessRange={[100, 800]}
-          color="#ffffff"
-          attenuationDistance={2}
-          attenuationColor="#06b6d4"
-          clearcoat={1}
-          clearcoatRoughness={0.1}
-        />
+        <icosahedronGeometry args={[1, detail]} />
+        {quality === 'high' ? (
+          <MeshTransmissionMaterial
+            ref={materialRef}
+            onBeforeCompile={onBeforeCompile}
+            backside
+            samples={6}
+            resolution={1024}
+            thickness={2.5}
+            roughness={0.1}
+            transmission={1}
+            ior={1.3}
+            chromaticAberration={0.8}
+            anisotropy={0.3}
+            distortion={1.0}
+            distortionScale={0.3}
+            temporalDistortion={0.2}
+            iridescence={1.2}
+            iridescenceIOR={1.1}
+            iridescenceThicknessRange={[100, 800]}
+            color="#ffffff"
+            attenuationDistance={2}
+            attenuationColor="#06b6d4"
+            clearcoat={1}
+            clearcoatRoughness={0.1}
+          />
+        ) : (
+          <meshPhysicalMaterial
+            ref={materialRef}
+            onBeforeCompile={onBeforeCompile}
+            transparent
+            opacity={quality === 'medium' ? 0.85 : 0.75}
+            roughness={quality === 'medium' ? 0.15 : 0.25}
+            transmission={quality === 'medium' ? 0.6 : 0.3}
+            ior={1.2}
+            thickness={1.5}
+            color="#ffffff"
+            clearcoat={quality === 'medium' ? 0.8 : 0.4}
+            clearcoatRoughness={0.2}
+            metalness={0.05}
+          />
+        )}
       </mesh>
       
       {/* Inner Dynamic Energy Core */}
       <mesh ref={innerMeshRef} scale={0.5}>
-        <icosahedronGeometry args={[1, isLowQuality ? 16 : 32]} />
+        <icosahedronGeometry args={[1, innerDetail]} />
         <meshPhysicalMaterial 
           color="#a855f7"
           emissive="#3b82f6"
-          emissiveIntensity={2.5}
+          emissiveIntensity={quality === 'low' ? 1.5 : 2.5}
           roughness={0.2}
           metalness={0.8}
-          iridescence={1.5}
+          iridescence={quality === 'high' ? 1.5 : 0}
           iridescenceIOR={1.5}
           iridescenceThicknessRange={[200, 600]}
           wireframe={true}
@@ -222,7 +251,7 @@ export function NexaflowCore() {
 
       {/* Internal dense particle node */}
       <mesh scale={0.2}>
-        <sphereGeometry args={[1, 16, 16]} />
+        <sphereGeometry args={[1, quality === 'low' ? 8 : 16, quality === 'low' ? 8 : 16]} />
         <meshBasicMaterial color="#ffffff" transparent opacity={0.9} />
       </mesh>
     </group>

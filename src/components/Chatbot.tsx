@@ -11,7 +11,7 @@ interface Message {
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { text: "Hello! Welcome to NexaFlow AI. How can we help your business today?", isBot: true }
+    { text: "Hello! Welcome to Nexaflow AI. How can we help your business today?", isBot: true }
   ]);
   const [input, setInput] = useState('');
   const [isSending, setIsSending] = useState(false);
@@ -152,7 +152,7 @@ export default function Chatbot() {
 
         <div className="p-4 h-72 overflow-y-auto space-y-4 text-xs font-medium">
           <div className="p-2.5 rounded-xl bg-brand-electricBlue/5 border border-brand-electricBlue/10 space-y-2 text-slate-300 text-[11px] mb-4">
-            <p className="font-bold text-brand-cyanAccent">Contact NexaFlow AI:</p>
+            <p className="font-bold text-brand-cyanAccent">Contact Nexaflow AI:</p>
             <p>WhatsApp: <strong>+268 79375018</strong></p>
             <p>Email: <strong>andrewtsabedze943@gmail.com</strong></p>
           </div>

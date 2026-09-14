@@ -62,7 +62,7 @@ export default function Contact() {
 
   return (
     <>
-      <section id="contact" className="py-24 relative overflow-hidden bg-transparent border-t border-slate-800">
+      <section id="contact" className="py-24 relative overflow-hidden bg-nexa-deep border-t border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
           <div className="grid lg:grid-cols-12 gap-12">
             {/* Left Column */}
@@ -196,12 +196,12 @@ export default function Contact() {
         </div>
       </section>
 
-      <section className="py-24 relative overflow-hidden bg-transparent border-t border-slate-800">
+      <section className="py-24 relative overflow-hidden bg-nexa-deep border-t border-slate-800">
         <div className="absolute -top-1/2 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-brand-electricBlue/10 rounded-full blur-[120px] pointer-events-none"></div>
         <div className="max-w-4xl mx-auto px-4 sm:px-8 relative z-10 text-center space-y-8">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight">Ready to Grow Your Business?</h2>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight">Ready to Transform Your Business?</h2>
           <p className="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-            Whether you need a professional website, lead generation system, or AI-powered automation, NexaFlow AI is ready to help you build smarter and grow faster.
+            Whether you need a custom website, lead generation automation, or an AI chatbot, Nexaflow AI Agency is ready to help you build smarter and scale faster.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a href="#contact" className="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-brand-electricBlue to-brand-cyanAccent text-white font-bold shadow-lg hover:opacity-90 hover:scale-102 transition-all text-center" onClick={() => playSynthBeep(880, 0.1)}>

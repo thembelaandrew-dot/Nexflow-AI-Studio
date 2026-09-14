@@ -2,14 +2,14 @@ import { PhoneCall, Zap, Smile, Shield } from 'lucide-react';
 
 export default function BoutiqueAgency() {
   return (
-    <section className="py-24 relative border-t border-slate-800 bg-transparent">
-      <div className="max-w-7xl mx-auto px-4 sm:px-8">
+    <section className="py-24 relative border-t border-slate-800 bg-gradient-to-b from-nexa-dark-blue to-[#02050c]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
         <div className="grid lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-5 space-y-6">
             <span className="text-brand-cyanAccent uppercase tracking-widest text-xs font-bold bg-brand-cyanAccent/10 px-4 py-1.5 rounded-full">Boutique Agency Model</span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-white">Small Team. Big Results.</h2>
             <p className="text-slate-300 leading-relaxed">
-              NexaFlow AI focuses on quality over quantity. Every project receives personal attention, direct communication, and a commitment to delivering practical digital solutions that help organizations grow.
+              Based in Eswatini and serving organizations across Africa and worldwide, Nexaflow AI focuses on quality over quantity. Every project receives personal attention, direct communication, and a commitment to delivering practical digital solutions that help organizations grow.
             </p>
           </div>
           <div className="lg:col-span-7 grid sm:grid-cols-2 gap-6">

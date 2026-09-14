@@ -29,7 +29,7 @@ export default function Preloader() {
           </span>
         </div>
         <div className="mt-8 text-xs tracking-widest text-brand-cyanAccent uppercase font-bold animate-pulse">
-          Initializing NexaFlow System
+          Initializing Nexaflow System
         </div>
         <div className="w-48 h-1 bg-slate-900 rounded-full overflow-hidden mt-3">
           <div className="h-full bg-gradient-to-r from-brand-electricBlue to-brand-cyanAccent w-0 animate-[loadingBar_1.2s_ease-in-out_forwards]"></div>

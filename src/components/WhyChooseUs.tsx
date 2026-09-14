@@ -13,11 +13,11 @@ export default function WhyChooseUs() {
   ];
 
   return (
-    <section id="why-choose-us" className="py-24 relative border-t border-slate-800 bg-transparent">
-      <div className="max-w-7xl mx-auto px-4 sm:px-8">
+    <section id="why-choose-us" className="py-24 relative border-t border-slate-800 bg-gradient-to-b from-nexa-deep to-nexa-dark-blue">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="text-brand-cyanAccent uppercase tracking-widest text-xs font-bold bg-brand-cyanAccent/10 px-4 py-1.5 rounded-full">Core Principles</span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold mt-3 text-white">Why Choose NexaFlow AI?</h2>
+          <h2 className="text-3xl sm:text-4xl font-extrabold mt-3 text-white">Why Choose Nexaflow AI?</h2>
           <p className="text-slate-400 mt-2">We build and scale customized tools that help your organization operate efficiently.</p>
         </div>
         

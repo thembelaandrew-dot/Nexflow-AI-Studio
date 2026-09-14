@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronDown, MessageCircle } from 'lucide-react';
 import { playSynthBeep } from '../lib/audio';
 import { motion, AnimatePresence } from 'motion/react';
@@ -8,29 +8,53 @@ export default function FAQ() {
 
   const faqs = [
     {
-      q: "How long does it take to build a website?",
-      a: "Most of our standard business websites are completed within 1-2 weeks. Complex projects or custom AI integrations may take 3-4 weeks. We prioritize rapid delivery without sacrificing quality."
+      q: "What does Nexaflow AI do?",
+      a: "Nexaflow AI is a premium digital agency specializing in custom website development, AI automation, intelligent chatbots, and business workflow systems. We build high-performance digital tools that help businesses operate efficiently and scale globally."
     },
     {
-      q: "Do I need to provide the text and images?",
-      a: "It's best if you have your own brand assets, but if not, our team can help generate professional copy and source high-quality premium imagery for your site."
+      q: "How much does AI automation cost?",
+      a: "The cost of AI automation varies based on the complexity of your workflows. Simple chatbot integrations or automated lead capture systems start at very affordable rates, while comprehensive enterprise workflow automations require custom scoping. We offer flexible pricing models suited for both startups and established enterprises."
     },
     {
-      q: "What is an AI Automation and how does it help?",
-      a: "AI automation means using intelligent software to do repetitive tasks for you. For example, automatically responding to customer inquiries, booking appointments, capturing leads, or syncing data to your CRM, freeing you up to focus on growing your business."
+      q: "Do you build websites worldwide?",
+      a: "Yes, we serve clients globally. As a digital-first AI agency, our team operates completely online, allowing us to build websites, web applications, and AI integrations for businesses in Eswatini, Africa, and anywhere else in the world."
     },
     {
-      q: "Will my website work on mobile phones?",
-      a: "Yes. Every website we build is \"mobile-first,\" meaning it is explicitly designed and optimized to look and perform flawlessly on smartphones and tablets."
+      q: "What businesses can use AI automation?",
+      a: "Almost any business can benefit from AI automation. Real estate, e-commerce, healthcare, marketing agencies, and consulting firms use our systems to automate lead generation, customer support, data entry, and appointment scheduling, saving hundreds of manual hours every month."
     },
     {
-      q: "Are there any hidden monthly fees?",
-      a: "No hidden fees. You pay the project cost upfront or in milestones. The only ongoing costs are standard domain and hosting fees (usually around $10-$20/month depending on your traffic), which we help you set up in your own name."
+      q: "Can you build AI chatbots?",
+      a: "Absolutely. We specialize in building custom, intelligent AI chatbots powered by advanced language models like ChatGPT and Gemini. These bots can be integrated directly into your website or WhatsApp to handle 24/7 customer support, sales inquiries, and bookings."
     }
   ];
 
+  // Add structured data for FAQ
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    const jsonLd = {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": faqs.map(faq => ({
+        "@type": "Question",
+        "name": faq.q,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": faq.a
+        }
+      }))
+    };
+    script.innerHTML = JSON.stringify(jsonLd);
+    document.head.appendChild(script);
+    
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, []);
+
   return (
-    <section id="faq" className="py-32 relative bg-transparent overflow-hidden">
+    <section id="faq" className="py-32 relative bg-gradient-to-b from-nexa-dark-blue to-nexa-deep overflow-hidden">
       <div className="max-w-4xl mx-auto px-6 relative z-10">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}

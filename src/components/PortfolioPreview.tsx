@@ -5,7 +5,7 @@ import { motion } from 'motion/react';
 
 export default function PortfolioPreview() {
   return (
-    <section id="portfolio-preview" className="py-24 relative overflow-hidden bg-transparent">
+    <section id="portfolio-preview" className="py-24 relative overflow-hidden bg-nexa-blue-gray border-t border-slate-800/50">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-brand-electricBlue/10 via-transparent to-transparent pointer-events-none"></div>
       
       <div className="max-w-7xl mx-auto px-6 relative z-10">

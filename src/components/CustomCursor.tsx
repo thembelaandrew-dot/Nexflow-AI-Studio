@@ -49,14 +49,14 @@ export default function CustomCursor() {
 
   return (
     <motion.div
-      className="fixed top-0 left-0 z-[100] pointer-events-none mix-blend-difference hidden md:block"
+      className="fixed top-0 left-0 z-[100] pointer-events-none hidden md:block"
       style={{
         x: cursorXSpring,
         y: cursorYSpring,
       }}
     >
       <motion.div 
-        className="w-8 h-8 rounded-full border border-brand-cyanAccent/50 flex items-center justify-center bg-brand-electricBlue/10 backdrop-blur-sm"
+        className="w-8 h-8 rounded-full border border-brand-cyanAccent/50 flex items-center justify-center bg-brand-electricBlue/20"
         animate={{
           scale: isHovering ? 1.8 : 1,
           backgroundColor: isHovering ? 'rgba(6, 182, 212, 0.2)' : 'rgba(59, 130, 246, 0.1)',

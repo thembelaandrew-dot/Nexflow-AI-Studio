@@ -141,6 +141,9 @@ CRITICAL: Once you have successfully collected at least the visitor's Name and E
     }
   });
 
+  // Serve static assets directly from public/
+  app.use(express.static(path.join(process.cwd(), 'public')));
+
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
