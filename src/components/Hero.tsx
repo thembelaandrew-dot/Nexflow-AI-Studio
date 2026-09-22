@@ -102,8 +102,82 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* Right empty space for 3D core negative space */}
-        <div className="lg:col-span-5 hidden lg:block pointer-events-none"></div>
+        {/* Right Showcase: Real-Time AI Automation Architecture */}
+        <motion.div 
+          variants={itemVariants} 
+          className="lg:col-span-5 relative hidden lg:block"
+        >
+          {/* Subtle Ambient Glow */}
+          <div className="absolute -inset-4 bg-gradient-to-r from-brand-electricBlue/20 to-brand-cyanAccent/20 rounded-3xl blur-2xl opacity-60 pointer-events-none" />
+
+          {/* High-Fidelity Glassmorphic Terminal Card */}
+          <div className="relative rounded-2xl border border-white/10 bg-slate-900/60 backdrop-blur-xl p-6 shadow-2xl overflow-hidden">
+            {/* Window Header */}
+            <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-5">
+              <div className="flex items-center gap-2">
+                <span className="w-3 h-3 rounded-full bg-rose-500/80" />
+                <span className="w-3 h-3 rounded-full bg-amber-500/80" />
+                <span className="w-3 h-3 rounded-full bg-emerald-500/80" />
+                <span className="text-xs font-mono text-slate-400 ml-2">nexaflow-core // active</span>
+              </div>
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                Live Systems
+              </span>
+            </div>
+
+            {/* Live Pipeline Visualizer */}
+            <div className="space-y-3 font-mono text-xs">
+              <div className="p-3 rounded-xl bg-slate-800/50 border border-white/5 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-brand-electricBlue/10 flex items-center justify-center text-brand-electricBlue">
+                    <Bot className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="text-white font-sans font-semibold text-xs">AI Lead Qualification</p>
+                    <p className="text-slate-400 text-[11px]">Chatbot & Multi-Channel</p>
+                  </div>
+                </div>
+                <span className="text-brand-cyanAccent text-[11px] font-semibold">&lt; 1.2s avg</span>
+              </div>
+
+              <div className="p-3 rounded-xl bg-slate-800/50 border border-white/5 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-brand-cyanAccent/10 flex items-center justify-center text-brand-cyanAccent">
+                    <Cpu className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="text-white font-sans font-semibold text-xs">CRM & Workflow Engine</p>
+                    <p className="text-slate-400 text-[11px]">Make • Webhooks • Cloud Sync</p>
+                  </div>
+                </div>
+                <span className="text-emerald-400 text-[11px] font-semibold">99.98% uptime</span>
+              </div>
+
+              <div className="p-3 rounded-xl bg-slate-800/50 border border-white/5 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+                    <TrendingUp className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="text-white font-sans font-semibold text-xs">Client Conversion Lift</p>
+                    <p className="text-slate-400 text-[11px]">Direct revenue impact</p>
+                  </div>
+                </div>
+                <span className="text-emerald-400 font-bold text-[11px]">+42% lift</span>
+              </div>
+            </div>
+
+            {/* Bottom Status Ticker */}
+            <div className="mt-5 pt-4 border-t border-white/5 flex items-center justify-between text-[11px] text-slate-400">
+              <span className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-brand-cyanAccent animate-ping" />
+                Processing global requests
+              </span>
+              <span className="text-slate-500 font-mono">SZ • AF • GLOBAL</span>
+            </div>
+          </div>
+        </motion.div>
       </motion.div>
     </section>
   );

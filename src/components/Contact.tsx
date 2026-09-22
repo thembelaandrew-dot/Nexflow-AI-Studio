@@ -21,33 +21,21 @@ export default function Contact() {
     setError(null);
     setSubmitted(false);
 
-    console.log('EmailJS: Starting submission process...', {
-      serviceId: EMAILJS_CONFIG.SERVICE_ID,
-      templateId: EMAILJS_CONFIG.TEMPLATE_ID,
-    });
-
     try {
-      // 2. Await the sendForm promise to ensure it completes before resetting
-      const response = await emailjs.sendForm(
+      // Await the sendForm promise to ensure it completes before resetting
+      await emailjs.sendForm(
         EMAILJS_CONFIG.SERVICE_ID,
         EMAILJS_CONFIG.TEMPLATE_ID,
         formRef.current,
-        EMAILJS_CONFIG.PUBLIC_KEY // Public key is correct as 4th argument
+        EMAILJS_CONFIG.PUBLIC_KEY
       );
       
-      console.log('EmailJS: Success!', { status: response.status, text: response.text });
       setSubmitted(true);
       playSynthBeep(900, 0.2, 'triangle');
-      formRef.current.reset(); // 3. Safe to reset here since await has finished
+      formRef.current.reset();
     } catch (err: any) {
-      // 4. Detailed error logging to catch exact failure reason
-      console.error('EmailJS: Error caught during sendForm():', err);
-      
       let errorMessage = 'Failed to send message. Please try again later.';
-      
-      // EmailJS errors often come as an object with status and text properties
       if (err?.status || err?.text) {
-        console.error(`EmailJS Error Details - Status: ${err.status}, Text: ${err.text}`);
         errorMessage = `EmailJS Error (${err.status}): ${err.text}`;
       } else if (err instanceof Error) {
         errorMessage = err.message;
@@ -57,7 +45,6 @@ export default function Contact() {
       playSynthBeep(200, 0.2, 'square');
     } finally {
       setIsSubmitting(false);
-      console.log('EmailJS: Submission process completed.');
     }
   };
 

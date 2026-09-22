@@ -29,6 +29,7 @@ import ProjectPage from './pages/ProjectPage';
 import { CurrencyProvider } from './lib/CurrencyContext';
 import SmoothScroll from './components/SmoothScroll';
 import CustomCursor from './components/CustomCursor';
+import ScrollProgress from './components/ScrollProgress';
 
 function ScrollToHashElement() {
   const { hash, pathname } = useLocation();
@@ -81,6 +82,7 @@ export default function App() {
     <CurrencyProvider>
       <SmoothScroll>
         <Router>
+          <ScrollProgress />
           <ScrollToHashElement />
           <PointerGlow />
           <CustomCursor />

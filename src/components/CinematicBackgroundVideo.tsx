@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useMemo } from 'react';
+import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 
 export interface CinematicBackgroundVideoProps {
   mp4Src: string;
@@ -33,19 +33,38 @@ export default function CinematicBackgroundVideo({
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [shouldPlay, setShouldPlay] = useState(true);
-  const [isInViewport, setIsInViewport] = useState(false);
-  const [hasApproached, setHasApproached] = useState(false);
+  const isPlayingRef = useRef(false);
 
-  // Generate responsive Cloudinary variants with reduced bitrates and scaled dimensions
-  const { mobileMp4, desktopMp4, mobileWebm, desktopWebm } = useMemo(() => {
-    const mobileMp4 = getOptimizedCloudinaryUrl(mp4Src, 'q_auto:eco,w_720,c_limit,vc_auto');
-    const desktopMp4 = getOptimizedCloudinaryUrl(mp4Src, 'q_auto:good,w_1280,c_limit,vc_auto');
-    const mobileWebm = webmSrc ? getOptimizedCloudinaryUrl(webmSrc, 'q_auto:eco,w_720,c_limit,vc_auto') : undefined;
-    const desktopWebm = webmSrc ? getOptimizedCloudinaryUrl(webmSrc, 'q_auto:good,w_1280,c_limit,vc_auto') : undefined;
-    return { mobileMp4, desktopMp4, mobileWebm, desktopWebm };
-  }, [mp4Src, webmSrc]);
+  // Cloudinary quality optimization:
+  // Using q_auto:best,w_1080 for crisp, pristine mobile & desktop playback without macroblocking or blur
+  const { optimizedMp4, optimizedWebm, optimizedPoster } = useMemo(() => {
+    // Deliver pristine 1080p high-bitrate video stream across all devices without quality drop
+    const optimizedMp4 = getOptimizedCloudinaryUrl(mp4Src, 'q_auto:best,w_1080,vc_auto');
+    const optimizedWebm = webmSrc ? getOptimizedCloudinaryUrl(webmSrc, 'q_auto:best,w_1080,vc_auto') : undefined;
+    const optimizedPoster = getOptimizedCloudinaryUrl(posterSrc, 'q_auto:best,w_1920');
+    return { optimizedMp4, optimizedWebm, optimizedPoster };
+  }, [mp4Src, webmSrc, posterSrc]);
 
-  // 1. Accessibility: prefers-reduced-motion detection
+  // Safe play helper to eliminate AbortError and keep playback continuous
+  const safePlay = useCallback(async () => {
+    const video = videoRef.current;
+    if (!video || !shouldPlay) return;
+
+    try {
+      video.muted = true;
+      video.defaultMuted = true;
+      const promise = video.play();
+      if (promise !== undefined) {
+        isPlayingRef.current = true;
+        await promise;
+      }
+    } catch {
+      isPlayingRef.current = false;
+      // Auto-play was temporarily restrained or interrupted; will re-attempt seamlessly
+    }
+  }, [shouldPlay]);
+
+  // 1. Accessibility: respects prefers-reduced-motion
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
@@ -60,51 +79,73 @@ export default function CinematicBackgroundVideo({
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
-  // 2. Performance: IntersectionObserver to load when approaching and pause when off-screen
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el || typeof IntersectionObserver === 'undefined') {
-      setIsInViewport(true);
-      setHasApproached(true);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          setIsInViewport(entry.isIntersecting);
-          if (entry.isIntersecting) {
-            setHasApproached(true);
-          }
-        });
-      },
-      {
-        root: null,
-        rootMargin: '200px 0px 200px 0px', // Pre-load slightly before scrolling into view
-        threshold: 0.02
-      }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  // 3. Play/Pause based on viewport visibility and reduced motion state
+  // 2. Hardware initialization & mobile inline setup
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    if (shouldPlay && isInViewport) {
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          // Auto-play was prevented by browser policy / power save
-        });
-      }
-    } else {
-      video.pause();
+    // Imperative inline video attributes for WebKit / iOS Safari & Android
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+    video.setAttribute('playsinline', 'true');
+    video.setAttribute('webkit-playsinline', 'true');
+    video.setAttribute('muted', 'true');
+    video.setAttribute('autoplay', 'true');
+    video.setAttribute('loop', 'true');
+
+    // Immediate initial play
+    if (shouldPlay) {
+      safePlay();
     }
-  }, [shouldPlay, isInViewport]);
+
+    // Auto-recovery: if mobile browser pauses or stalls on touch scroll or memory pressure, smoothly resume
+    const handlePauseOrStall = () => {
+      if (shouldPlay && document.visibilityState === 'visible') {
+        safePlay();
+      }
+    };
+
+    video.addEventListener('pause', handlePauseOrStall);
+    video.addEventListener('stalled', handlePauseOrStall);
+    video.addEventListener('waiting', handlePauseOrStall);
+
+    // Global first-gesture unlock for strict mobile autoplay policies
+    const unlockPlay = () => {
+      safePlay();
+      window.removeEventListener('touchstart', unlockPlay);
+      window.removeEventListener('click', unlockPlay);
+    };
+
+    window.addEventListener('touchstart', unlockPlay, { passive: true, once: true });
+    window.addEventListener('click', unlockPlay, { passive: true, once: true });
+
+    return () => {
+      video.removeEventListener('pause', handlePauseOrStall);
+      video.removeEventListener('stalled', handlePauseOrStall);
+      video.removeEventListener('waiting', handlePauseOrStall);
+      window.removeEventListener('touchstart', unlockPlay);
+      window.removeEventListener('click', unlockPlay);
+    };
+  }, [shouldPlay, safePlay]);
+
+  // 3. Page visibility management: only pause when tab is in background / screen is locked
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      const video = videoRef.current;
+      if (!video) return;
+
+      if (document.visibilityState === 'visible') {
+        if (shouldPlay) safePlay();
+      } else {
+        video.pause();
+        isPlayingRef.current = false;
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [shouldPlay, safePlay]);
 
   return (
     <div
@@ -112,30 +153,30 @@ export default function CinematicBackgroundVideo({
       className={`absolute inset-0 overflow-hidden pointer-events-none select-none z-0 ${className}`}
       aria-hidden="true"
     >
-      {/* Layer 0: Dark fallback poster image with explicit sizing to prevent CLS */}
+      {/* Layer 0: High-fidelity fallback poster image to eliminate CLS and blank flashes */}
       <div
-        className="absolute inset-0 bg-[#02050c] bg-cover bg-center"
+        className="absolute inset-0 bg-[#02050c] bg-cover bg-center transition-opacity duration-700"
         style={{
-          backgroundImage: `url('${posterSrc}')`,
+          backgroundImage: `url('${optimizedPoster}')`,
           width: '100%',
           height: '100%',
           aspectRatio: '16/9'
         }}
       />
 
-      {/* Layer 1: Cinematic Video Asset - mounted only when approached and motion allowed */}
-      {shouldPlay && hasApproached && (
+      {/* Layer 1: Cinematic Video Asset - continuously running without scroll interruptions */}
+      {shouldPlay && (
         <video
           ref={videoRef}
-          poster={posterSrc}
+          poster={optimizedPoster}
           width={1920}
           height={1080}
-          className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-1000 ease-out ${
+          className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-700 ease-out ${
             isLoaded ? 'opacity-100' : 'opacity-0'
           }`}
           style={{
-            willChange: 'opacity, transform',
-            transform: 'translateZ(0)',
+            transform: 'translate3d(0, 0, 0)',
+            backfaceVisibility: 'hidden',
             width: '100%',
             height: '100%',
             aspectRatio: '16/9',
@@ -145,18 +186,19 @@ export default function CinematicBackgroundVideo({
           loop
           muted
           playsInline
-          preload="metadata"
+          preload="auto"
           onLoadedData={() => setIsLoaded(true)}
-          onCanPlay={() => setIsLoaded(true)}
+          onCanPlay={() => {
+            setIsLoaded(true);
+            safePlay();
+          }}
         >
-          {mobileWebm && <source media="(max-width: 768px)" src={mobileWebm} type="video/webm" />}
-          <source media="(max-width: 768px)" src={mobileMp4} type="video/mp4" />
-          {desktopWebm && <source src={desktopWebm} type="video/webm" />}
-          <source src={desktopMp4} type="video/mp4" />
+          {optimizedWebm && <source src={optimizedWebm} type="video/webm" />}
+          <source src={optimizedMp4} type="video/mp4" />
         </video>
       )}
 
-      {/* Layer 2: Atmospheric dark layer to maintain high readability */}
+      {/* Layer 2: Atmospheric dark layer to ensure pristine text readability */}
       <div 
         className="absolute inset-0 bg-[#02050c]" 
         style={{ opacity: overlayOpacity }}

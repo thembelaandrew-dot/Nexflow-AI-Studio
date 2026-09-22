@@ -56,7 +56,6 @@ export default function Chatbot() {
       setFallbackData(prev => ({ ...prev, email: text }));
       
       try {
-        console.log("Chatbot (Fallback): Sending EmailJS...", fallbackData);
         await emailjs.send(
           EMAILJS_CONFIG.SERVICE_ID,
           EMAILJS_CONFIG.TEMPLATE_ID,
@@ -77,7 +76,6 @@ export default function Chatbot() {
           playSynthBeep(600, 0.08);
         }, 500);
       } catch (err) {
-        console.error("Chatbot (Fallback): EmailJS failed", err);
         setTimeout(() => {
           setMessages(prev => [...prev, { text: "Sorry, there was an error sending your details. Please contact us directly on WhatsApp at +268 79375018.", isBot: true }]);
           setChatMode('normal');
@@ -89,7 +87,6 @@ export default function Chatbot() {
     }
 
     try {
-      console.log("Chatbot: Sending to /api/chat");
       // Format messages for Gemini
       const geminiMessages = newMessages.map(msg => ({
         role: msg.isBot ? 'model' : 'user',
@@ -108,7 +105,6 @@ export default function Chatbot() {
       }
 
       const data = await response.json();
-      console.log("Chatbot: Received response from /api/chat");
       
       setMessages(prev => [...prev, { text: data.text, isBot: true }]);
       playSynthBeep(600, 0.08);
