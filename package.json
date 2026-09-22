@@ -42,7 +42,6 @@
     "vite": "^6.2.3"
   },
   "description": "",
-  "main": "test-genai.js",
   "keywords": [],
   "author": "",
   "license": "ISC"

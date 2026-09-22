@@ -23,6 +23,7 @@ import PointerGlow from './components/PointerGlow';
 import Preloader from './components/Preloader';
 import ScrollToTop from './components/ScrollToTop';
 import Chatbot from './components/Chatbot';
+import LeadPopup from './components/LeadPopup';
 import PortfolioPage from './pages/PortfolioPage';
 import ProjectPage from './pages/ProjectPage';
 import { CurrencyProvider } from './lib/CurrencyContext';
@@ -68,6 +69,7 @@ function HomePage() {
       </main>
       <Footer />
       
+      <LeadPopup />
       <Chatbot />
       <ScrollToTop />
     </>

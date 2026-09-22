@@ -122,7 +122,7 @@ export default function Referral() {
             <div className="mt-8 relative z-10 space-y-3">
               <p className="text-sm text-slate-300 text-center font-bold mb-4">Choose how you want to join:</p>
               
-              <a href="https://wa.me/26879375018?text=Hi,%20I'd%20like%20to%20join%20the%20referral%20program." target="_blank" className="flex items-center justify-center gap-2 w-full py-3 bg-green-500/20 hover:bg-green-500/30 text-green-400 font-bold rounded-xl transition-all text-sm border border-green-500/20" onClick={() => playSynthBeep(850, 0.1)}>
+              <a href="https://wa.me/26879375018?text=Hi,%20I'd%20like%20to%20join%20the%20referral%20program." target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full py-3 bg-green-500/20 hover:bg-green-500/30 text-green-400 font-bold rounded-xl transition-all text-sm border border-green-500/20" onClick={() => playSynthBeep(850, 0.1)}>
                 <Phone className="w-4 h-4" /> Join via WhatsApp
               </a>
               <a href="mailto:andrewtsabedze943@gmail.com?subject=Join%20Referral%20Program&body=Hi,%20I'd%20like%20to%20join%20the%20referral%20program." className="flex items-center justify-center gap-2 w-full py-3 bg-brand-electricBlue/20 hover:bg-brand-electricBlue/30 text-brand-cyanAccent font-bold rounded-xl transition-all text-sm border border-brand-electricBlue/20" onClick={() => playSynthBeep(850, 0.1)}>

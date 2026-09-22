@@ -18,7 +18,7 @@ export default function Team() {
               <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-brand-electricBlue to-brand-cyanAccent opacity-25 blur-xl group-hover:opacity-35 transition-all"></div>
               
               <div className="relative rounded-2xl overflow-hidden aspect-[4/5] bg-slate-900 border border-slate-700">
-                <img src="https://i.imgur.com/AfBbkKJ.jpeg" alt="Andrew Tsabedze Founder of Nexaflow AI" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" loading="lazy" />
+                <img src="/assets/founder.jpg" alt="Andrew Tsabedze Founder of Nexaflow AI" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" loading="lazy" />
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-deep via-brand-deep/20 to-transparent"></div>
                 
                 <div className="absolute bottom-6 left-6 right-6">

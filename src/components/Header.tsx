@@ -29,7 +29,7 @@ export default function Header() {
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3 group" onClick={() => playSynthBeep(600, 0.1)}>
             <img
-              src="https://i.imgur.com/DftcbVu.jpeg"
+              src="/assets/logo.jpg"
               alt="Nexaflow AI - African AI & Website Development Agency"
               width="200"
               height="48"

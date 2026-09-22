@@ -4,13 +4,22 @@ export default function PointerGlow() {
   const glowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const isTouch = window.matchMedia('(pointer: coarse)').matches || 'ontouchstart' in window;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (isTouch || prefersReducedMotion) {
+      return;
+    }
+
     const handleMouseMove = (e: MouseEvent) => {
       if (glowRef.current) {
         glowRef.current.style.setProperty('--x', e.clientX + 'px');
         glowRef.current.style.setProperty('--y', e.clientY + 'px');
       }
     };
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 

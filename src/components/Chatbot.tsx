@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, FormEvent } from 'react';
 import { MessageSquare, X, Send, Minus } from 'lucide-react';
 import { playSynthBeep } from '../lib/audio';
 import emailjs from '@emailjs/browser';
+import { EMAILJS_CONFIG } from '../lib/emailConfig';
 
 interface Message {
   text: string;
@@ -57,8 +58,8 @@ export default function Chatbot() {
       try {
         console.log("Chatbot (Fallback): Sending EmailJS...", fallbackData);
         await emailjs.send(
-          'service_ia09u36',
-          'template_ehl0jih',
+          EMAILJS_CONFIG.SERVICE_ID,
+          EMAILJS_CONFIG.TEMPLATE_ID,
           {
             user_name: fallbackData.name,
             user_email: text,
@@ -67,7 +68,7 @@ export default function Chatbot() {
             business_name: 'N/A',
             phone_number: 'N/A'
           },
-          'A9RbRJq0719TUlvNx'
+          EMAILJS_CONFIG.PUBLIC_KEY
         );
         setTimeout(() => {
           setMessages(prev => [...prev, { text: "Thank you! Your details have been sent successfully. Andrew will get back to you as soon as possible.", isBot: true }]);

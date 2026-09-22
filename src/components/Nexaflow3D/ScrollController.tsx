@@ -7,7 +7,12 @@ export function ScrollController() {
   useEffect(() => {
     const handleScroll = () => {
       const maxScroll = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
-      Global3DState.targetScrollProgress = Math.min(Math.max(window.scrollY / maxScroll, 0), 1);
+      const progress = Math.min(Math.max(window.scrollY / maxScroll, 0), 1);
+      Global3DState.targetScrollProgress = progress;
+
+      if (Global3DState.prefersReducedMotion) {
+        Global3DState.scrollProgress = progress;
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -19,6 +24,8 @@ export function ScrollController() {
   }, []);
 
   useFrame((_, delta) => {
+    if (Global3DState.prefersReducedMotion) return;
+
     // Exponential smoothing for scroll progress
     Global3DState.scrollProgress = THREE.MathUtils.lerp(
       Global3DState.scrollProgress,
@@ -29,3 +36,4 @@ export function ScrollController() {
 
   return null;
 }
+export default ScrollController;

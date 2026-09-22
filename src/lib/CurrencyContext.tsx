@@ -64,31 +64,36 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
   };
 
   const formatPrice = (usdPrice: number) => {
+    // Pricing configuration mapping exact USD amounts to preferred localized display amounts
+    // Note: Exchange rates are static. Update periodically or replace with a live FX API later.
+    const priceMap: Record<number, Record<Currency, string>> = {
+      135:  { USD: '$135',   EUR: '€125',   GBP: '£105',   ZAR: 'R2,500',  SZL: 'E2,500' },
+      216:  { USD: '$216',   EUR: '€200',   GBP: '£170',   ZAR: 'R4,000',  SZL: 'E4,000' },
+      324:  { USD: '$324',   EUR: '€300',   GBP: '£250',   ZAR: 'R6,000',  SZL: 'E6,000' },
+      540:  { USD: '$540',   EUR: '€500',   GBP: '£420',   ZAR: 'R10,000', SZL: 'E10,000' },
+      810:  { USD: '$810',   EUR: '€750',   GBP: '£630',   ZAR: 'R15,000', SZL: 'E15,000' },
+      1081: { USD: '$1,081', EUR: '€1,000', GBP: '£845',   ZAR: 'R20,000', SZL: 'E20,000' },
+      1621: { USD: '$1,621', EUR: '€1,500', GBP: '£1,265', ZAR: 'R30,000', SZL: 'E30,000' },
+      // Commissions
+      14:   { USD: '$14',    EUR: '€13',    GBP: '£11',    ZAR: 'R250',    SZL: 'E250' },
+      22:   { USD: '$22',    EUR: '€20',    GBP: '£17',    ZAR: 'R400',    SZL: 'E400' },
+      32:   { USD: '$32',    EUR: '€30',    GBP: '£25',    ZAR: 'R600',    SZL: 'E600' },
+      54:   { USD: '$54',    EUR: '€50',    GBP: '£42',    ZAR: 'R1,000',  SZL: 'E1,000' }
+    };
+
+    if (priceMap[usdPrice] && priceMap[usdPrice][currency]) {
+      return priceMap[usdPrice][currency];
+    }
+
+    // generic rounding for anything not explicitly mapped
     const rate = rates[currency];
     let converted = usdPrice * rate;
-
-    // Special rounding to match original exact pricing for ZAR/SZL
+    
     if (currency === 'ZAR' || currency === 'SZL') {
-      if (usdPrice === 135) return `${symbols[currency]}2,500`;
-      if (usdPrice === 216) return `${symbols[currency]}4,000`;
-      if (usdPrice === 324) return `${symbols[currency]}6,000`;
-      if (usdPrice === 540) return `${symbols[currency]}10,000`;
-      if (usdPrice === 810) return `${symbols[currency]}15,000`;
-      if (usdPrice === 1081) return `${symbols[currency]}20,000`;
-      if (usdPrice === 1621) return `${symbols[currency]}30,000`;
-      
-      // Commissions
-      if (usdPrice === 14) return `${symbols[currency]}250`;
-      if (usdPrice === 22) return `${symbols[currency]}400`;
-      if (usdPrice === 32) return `${symbols[currency]}600`;
-      if (usdPrice === 54) return `${symbols[currency]}1,000`;
-      
-      // generic rounding
       converted = Math.round(converted / 50) * 50;
       return `${symbols[currency]}${converted.toLocaleString()}`;
     }
 
-    // generic rounding for others
     converted = Math.round(converted);
     return `${symbols[currency]}${converted.toLocaleString()}`;
   };

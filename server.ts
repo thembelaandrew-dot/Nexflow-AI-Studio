@@ -21,6 +21,11 @@ async function startServer() {
 
   app.use(express.json());
 
+  // Health check endpoint
+  app.get("/api/health", (req, res) => {
+    res.json({ status: "ok" });
+  });
+
   // API route for Chatbot
   app.post("/api/chat", async (req, res) => {
     try {
@@ -60,7 +65,7 @@ CRITICAL: Once you have successfully collected at least the visitor's Name and E
 
       console.log("Chatbot: Calling Gemini API with messages...", JSON.stringify(messages.slice(-1)));
       const response = await ai.models.generateContent({
-        model: "gemini-3.5-flash",
+        model: "gemini-3.6-flash",
         contents: messages,
         config: {
           systemInstruction,
@@ -98,9 +103,9 @@ CRITICAL: Once you have successfully collected at least the visitor's Name and E
           console.log("Chatbot: Tool call 'submit_lead' triggered. Preparing EmailJS payload...", call.args);
           try {
             const emailjsPayload = {
-              service_id: "service_ia09u36",
-              template_id: "template_ehl0jih",
-              user_id: "A9RbRJq0719TUlvNx",
+              service_id: process.env.EMAILJS_SERVICE_ID || "service_ia09u36",
+              template_id: process.env.EMAILJS_TEMPLATE_ID || "template_ehl0jih",
+              user_id: process.env.EMAILJS_PUBLIC_KEY || "A9RbRJq0719TUlvNx",
               template_params: {
                 user_name: call.args.visitor_name,
                 user_email: call.args.visitor_email,

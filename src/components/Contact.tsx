@@ -2,6 +2,7 @@ import { useState, useRef, FormEvent } from 'react';
 import { Phone, Mail, Calendar, Send, CheckCircle, AlertCircle } from 'lucide-react';
 import { playSynthBeep } from '../lib/audio';
 import emailjs from '@emailjs/browser';
+import { EMAILJS_CONFIG } from '../lib/emailConfig';
 
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
@@ -21,17 +22,17 @@ export default function Contact() {
     setSubmitted(false);
 
     console.log('EmailJS: Starting submission process...', {
-      serviceId: 'service_ia09u36',
-      templateId: 'template_ehl0jih',
+      serviceId: EMAILJS_CONFIG.SERVICE_ID,
+      templateId: EMAILJS_CONFIG.TEMPLATE_ID,
     });
 
     try {
       // 2. Await the sendForm promise to ensure it completes before resetting
       const response = await emailjs.sendForm(
-        'service_ia09u36',
-        'template_ehl0jih',
+        EMAILJS_CONFIG.SERVICE_ID,
+        EMAILJS_CONFIG.TEMPLATE_ID,
         formRef.current,
-        'A9RbRJq0719TUlvNx' // Public key is correct as 4th argument
+        EMAILJS_CONFIG.PUBLIC_KEY // Public key is correct as 4th argument
       );
       
       console.log('EmailJS: Success!', { status: response.status, text: response.text });
@@ -75,7 +76,7 @@ export default function Contact() {
 
               {/* Direct contact details */}
               <div className="space-y-4">
-                <a href="https://wa.me/26879375018?text=Hi%20I%20would%20like%20to%20work%20with%20Nexaflow%20AI" target="_blank" className="flex items-center gap-4 glassmorphism p-4 rounded-xl border border-white/5 hover:border-brand-cyanAccent/40 transition-all block" onClick={() => playSynthBeep(550, 0.05)}>
+                <a href="https://wa.me/26879375018?text=Hi%20I%20would%20like%20to%20work%20with%20Nexaflow%20AI" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 glassmorphism p-4 rounded-xl border border-white/5 hover:border-brand-cyanAccent/40 transition-all block" onClick={() => playSynthBeep(550, 0.05)}>
                   <div className="w-11 h-11 rounded-lg bg-green-500/10 text-green-400 flex items-center justify-center border border-green-500/20 shrink-0">
                     <Phone className="w-5 h-5" />
                   </div>
@@ -120,7 +121,7 @@ export default function Contact() {
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <a href="https://wa.me/26879375018?text=Hi%20I%20would%20like%20to%20work%20with%20Nexaflow%20AI" target="_blank" className="flex-1 py-4 px-6 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold text-center flex items-center justify-center gap-2 hover:opacity-90 hover:scale-102 transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)]" onClick={() => playSynthBeep(650, 0.1)}>
+                  <a href="https://wa.me/26879375018?text=Hi%20I%20would%20like%20to%20work%20with%20Nexaflow%20AI" target="_blank" rel="noopener noreferrer" className="flex-1 py-4 px-6 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold text-center flex items-center justify-center gap-2 hover:opacity-90 hover:scale-102 transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)]" onClick={() => playSynthBeep(650, 0.1)}>
                     <Phone className="w-5 h-5" />
                     <span>Chat on WhatsApp</span>
                   </a>
@@ -207,7 +208,7 @@ export default function Contact() {
             <a href="#contact" className="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-brand-electricBlue to-brand-cyanAccent text-white font-bold shadow-lg hover:opacity-90 hover:scale-102 transition-all text-center" onClick={() => playSynthBeep(880, 0.1)}>
               Start a Conversation
             </a>
-            <a href="https://wa.me/26879375018?text=Hi%20I%20would%20like%20to%20work%20with%20Nexaflow%20AI" target="_blank" className="w-full sm:w-auto px-8 py-4 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white font-bold flex items-center justify-center gap-2 hover:scale-102 transition-all text-center" onClick={() => playSynthBeep(600, 0.08)}>
+            <a href="https://wa.me/26879375018?text=Hi%20I%20would%20like%20to%20work%20with%20Nexaflow%20AI" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto px-8 py-4 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white font-bold flex items-center justify-center gap-2 hover:scale-102 transition-all text-center" onClick={() => playSynthBeep(600, 0.08)}>
               <Phone className="w-5 h-5 text-green-400" />
               <span>Chat on WhatsApp</span>
             </a>

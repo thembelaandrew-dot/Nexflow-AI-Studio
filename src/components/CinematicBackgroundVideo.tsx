@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 
 export interface CinematicBackgroundVideoProps {
   mp4Src: string;
@@ -10,6 +10,12 @@ export interface CinematicBackgroundVideoProps {
   vignette?: boolean;
   overlayOpacity?: number; // 0 to 1
   className?: string;
+}
+
+function getOptimizedCloudinaryUrl(url: string, params: string): string {
+  if (!url || !url.includes('res.cloudinary.com')) return url;
+  if (url.includes('/video/upload/q_') || url.includes('/video/upload/w_')) return url;
+  return url.replace('/video/upload/', `/video/upload/${params}/`);
 }
 
 export default function CinematicBackgroundVideo({
@@ -28,6 +34,16 @@ export default function CinematicBackgroundVideo({
   const [isLoaded, setIsLoaded] = useState(false);
   const [shouldPlay, setShouldPlay] = useState(true);
   const [isInViewport, setIsInViewport] = useState(false);
+  const [hasApproached, setHasApproached] = useState(false);
+
+  // Generate responsive Cloudinary variants with reduced bitrates and scaled dimensions
+  const { mobileMp4, desktopMp4, mobileWebm, desktopWebm } = useMemo(() => {
+    const mobileMp4 = getOptimizedCloudinaryUrl(mp4Src, 'q_auto:eco,w_720,c_limit,vc_auto');
+    const desktopMp4 = getOptimizedCloudinaryUrl(mp4Src, 'q_auto:good,w_1280,c_limit,vc_auto');
+    const mobileWebm = webmSrc ? getOptimizedCloudinaryUrl(webmSrc, 'q_auto:eco,w_720,c_limit,vc_auto') : undefined;
+    const desktopWebm = webmSrc ? getOptimizedCloudinaryUrl(webmSrc, 'q_auto:good,w_1280,c_limit,vc_auto') : undefined;
+    return { mobileMp4, desktopMp4, mobileWebm, desktopWebm };
+  }, [mp4Src, webmSrc]);
 
   // 1. Accessibility: prefers-reduced-motion detection
   useEffect(() => {
@@ -44,11 +60,12 @@ export default function CinematicBackgroundVideo({
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
-  // 2. Performance: IntersectionObserver to pause when off-screen and resume when visible
+  // 2. Performance: IntersectionObserver to load when approaching and pause when off-screen
   useEffect(() => {
     const el = containerRef.current;
     if (!el || typeof IntersectionObserver === 'undefined') {
       setIsInViewport(true);
+      setHasApproached(true);
       return;
     }
 
@@ -56,12 +73,15 @@ export default function CinematicBackgroundVideo({
       (entries) => {
         entries.forEach((entry) => {
           setIsInViewport(entry.isIntersecting);
+          if (entry.isIntersecting) {
+            setHasApproached(true);
+          }
         });
       },
       {
         root: null,
-        rootMargin: '120px 0px 120px 0px', // Pre-load slightly before scrolling into view
-        threshold: 0.05
+        rootMargin: '200px 0px 200px 0px', // Pre-load slightly before scrolling into view
+        threshold: 0.02
       }
     );
 
@@ -78,7 +98,7 @@ export default function CinematicBackgroundVideo({
       const playPromise = video.play();
       if (playPromise !== undefined) {
         playPromise.catch(() => {
-          // Auto-play was prevented (e.g. low power mode)
+          // Auto-play was prevented by browser policy / power save
         });
       }
     } else {
@@ -92,31 +112,47 @@ export default function CinematicBackgroundVideo({
       className={`absolute inset-0 overflow-hidden pointer-events-none select-none z-0 ${className}`}
       aria-hidden="true"
     >
-      {/* Layer 0: Dark fallback/background image */}
+      {/* Layer 0: Dark fallback poster image with explicit sizing to prevent CLS */}
       <div
         className="absolute inset-0 bg-[#02050c] bg-cover bg-center"
-        style={{ backgroundImage: `url('${posterSrc}')` }}
+        style={{
+          backgroundImage: `url('${posterSrc}')`,
+          width: '100%',
+          height: '100%',
+          aspectRatio: '16/9'
+        }}
       />
 
-      {/* Layer 1: Cinematic Video Asset */}
-      {shouldPlay && (
+      {/* Layer 1: Cinematic Video Asset - mounted only when approached and motion allowed */}
+      {shouldPlay && hasApproached && (
         <video
           ref={videoRef}
           poster={posterSrc}
+          width={1920}
+          height={1080}
           className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-1000 ease-out ${
             isLoaded ? 'opacity-100' : 'opacity-0'
           }`}
-          style={{ willChange: "opacity, transform", transform: "translateZ(0)" }}
+          style={{
+            willChange: 'opacity, transform',
+            transform: 'translateZ(0)',
+            width: '100%',
+            height: '100%',
+            aspectRatio: '16/9',
+            objectFit: 'cover'
+          }}
           autoPlay
           loop
           muted
           playsInline
-          preload="auto"
+          preload="metadata"
           onLoadedData={() => setIsLoaded(true)}
           onCanPlay={() => setIsLoaded(true)}
         >
-          {webmSrc && <source src={webmSrc} type="video/webm" />}
-          <source src={mp4Src} type="video/mp4" />
+          {mobileWebm && <source media="(max-width: 768px)" src={mobileWebm} type="video/webm" />}
+          <source media="(max-width: 768px)" src={mobileMp4} type="video/mp4" />
+          {desktopWebm && <source src={desktopWebm} type="video/webm" />}
+          <source src={desktopMp4} type="video/mp4" />
         </video>
       )}
 

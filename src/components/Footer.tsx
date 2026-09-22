@@ -30,22 +30,22 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-12 gap-12 lg:gap-8 mb-16">
           <div className="col-span-2 md:col-span-4 lg:col-span-4 space-y-6">
             <a href="#" className="inline-block" onClick={() => playSynthBeep(600, 0.1)}>
-              <img src="https://i.imgur.com/DftcbVu.jpeg" alt="Nexaflow AI - AI Automation and Website Development Agency" className="h-10 w-auto object-contain rounded opacity-90 hover:opacity-100 transition-opacity" loading="lazy" width="200" height="40" onError={(e) => { e.currentTarget.outerHTML = "<span class='text-2xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-brand-electricBlue'>Nexaflow AI</span>"; }} />
+              <img src="/assets/logo.jpg" alt="Nexaflow AI - AI Automation and Website Development Agency" className="h-10 w-auto object-contain rounded opacity-90 hover:opacity-100 transition-opacity" loading="lazy" width="200" height="40" onError={(e) => { e.currentTarget.outerHTML = "<span class='text-2xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-brand-electricBlue'>Nexaflow AI</span>"; }} />
             </a>
             <p className="text-sm text-slate-400 leading-relaxed max-w-sm">
               Nexaflow AI is a premier AI and Digital agency providing custom website development, AI chatbots, and workflow automation services across Eswatini, Africa, and worldwide.
             </p>
             <div className="flex items-center gap-3 pt-2">
-              <a href="https://wa.me/26879375018?text=Hi%20I%20would%20like%20to%20work%20with%20Nexaflow%20AI" target="_blank" className="p-2.5 bg-white/5 border border-white/10 rounded-lg text-slate-400 hover:text-green-400 hover:bg-white/10 hover:border-white/20 transition-all" onClick={() => playSynthBeep(450, 0.05)}>
+              <a href="https://wa.me/26879375018?text=Hi%20I%20would%20like%20to%20work%20with%20Nexaflow%20AI" target="_blank" rel="noopener noreferrer" className="p-2.5 bg-white/5 border border-white/10 rounded-lg text-slate-400 hover:text-green-400 hover:bg-white/10 hover:border-white/20 transition-all" onClick={() => playSynthBeep(450, 0.05)}>
                 <Phone className="w-4 h-4" />
               </a>
               <a href="mailto:andrewtsabedze943@gmail.com" className="p-2.5 bg-white/5 border border-white/10 rounded-lg text-slate-400 hover:text-brand-electricBlue hover:bg-white/10 hover:border-white/20 transition-all" onClick={() => playSynthBeep(490, 0.05)}>
                 <Mail className="w-4 h-4" />
               </a>
-              <a href="https://www.instagram.com/nexaflow_ai.africa?igsh=MXRzdzc0MTdvYjYxaQ==" target="_blank" className="p-2.5 bg-white/5 border border-white/10 rounded-lg text-slate-400 hover:text-pink-500 hover:bg-white/10 hover:border-white/20 transition-all" onClick={() => playSynthBeep(520, 0.05)}>
+              <a href="https://www.instagram.com/nexaflow_ai.africa?igsh=MXRzdzc0MTdvYjYxaQ==" target="_blank" rel="noopener noreferrer" className="p-2.5 bg-white/5 border border-white/10 rounded-lg text-slate-400 hover:text-pink-500 hover:bg-white/10 hover:border-white/20 transition-all" onClick={() => playSynthBeep(520, 0.05)}>
                 <Instagram className="w-4 h-4" />
               </a>
-              <a href="https://www.facebook.com/profile.php?id=61591884524709" target="_blank" className="p-2.5 bg-white/5 border border-white/10 rounded-lg text-slate-400 hover:text-blue-500 hover:bg-white/10 hover:border-white/20 transition-all" onClick={() => playSynthBeep(550, 0.05)}>
+              <a href="https://www.facebook.com/profile.php?id=61591884524709" target="_blank" rel="noopener noreferrer" className="p-2.5 bg-white/5 border border-white/10 rounded-lg text-slate-400 hover:text-blue-500 hover:bg-white/10 hover:border-white/20 transition-all" onClick={() => playSynthBeep(550, 0.05)}>
                 <Facebook className="w-4 h-4" />
               </a>
             </div>

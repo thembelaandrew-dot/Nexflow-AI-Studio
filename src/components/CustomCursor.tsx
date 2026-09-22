@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, useMotionValue, useSpring } from 'motion/react';
 
 export default function CustomCursor() {
@@ -13,11 +13,23 @@ export default function CustomCursor() {
   const cursorYSpring = useSpring(cursorY, springConfig);
 
   useEffect(() => {
-    // Check if device supports hover
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    if (isTouchDevice) return;
+    if (typeof window === 'undefined') return;
+
+    // Check if device is touch or prefers reduced motion
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || window.matchMedia('(pointer: coarse)').matches;
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    if (isTouchDevice || motionQuery.matches) {
+      setIsVisible(false);
+      return;
+    }
     
     setIsVisible(true);
+
+    const handleMotionChange = (e: MediaQueryListEvent) => {
+      setIsVisible(!e.matches && !isTouchDevice);
+    };
+    motionQuery.addEventListener('change', handleMotionChange);
 
     const moveCursor = (e: MouseEvent) => {
       cursorX.set(e.clientX - 16); // Center offset
@@ -26,20 +38,22 @@ export default function CustomCursor() {
     
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
+      if (!target) return;
       // Check if hovering over clickable elements
-      const isClickable = window.getComputedStyle(target).cursor === 'pointer' || 
-                          target.tagName.toLowerCase() === 'a' || 
-                          target.tagName.toLowerCase() === 'button' ||
-                          target.closest('a') ||
-                          target.closest('button');
+      const isClickable = 
+        target.tagName.toLowerCase() === 'a' || 
+        target.tagName.toLowerCase() === 'button' ||
+        !!target.closest('a') ||
+        !!target.closest('button');
                           
-      setIsHovering(!!isClickable);
+      setIsHovering(isClickable);
     };
 
-    window.addEventListener('mousemove', moveCursor);
-    window.addEventListener('mouseover', handleMouseOver);
+    window.addEventListener('mousemove', moveCursor, { passive: true });
+    window.addEventListener('mouseover', handleMouseOver, { passive: true });
     
     return () => {
+      motionQuery.removeEventListener('change', handleMotionChange);
       window.removeEventListener('mousemove', moveCursor);
       window.removeEventListener('mouseover', handleMouseOver);
     };

@@ -6,8 +6,19 @@ import { ScrollController } from './ScrollController';
 import { PointerController } from './PointerController';
 import RefractiveFilter from './RefractiveFilter';
 import RefractiveOverlay, { RefractiveOverlayFrameSync } from './RefractiveOverlay';
+import BubbleVideoFallback from './BubbleVideoFallback';
 import { Global3DState, QualityTier } from './state';
 import { useEffect, useState } from 'react';
+
+function hasWebGLSupport(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    const canvas = document.createElement('canvas');
+    return !!(window.WebGLRenderingContext && (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+  } catch {
+    return false;
+  }
+}
 
 // Enhanced device & capability detection
 function detectCapabilities(): {
@@ -120,6 +131,14 @@ export default function Nexaflow3D() {
 
   // Cap dpr to 1 on mobile, [1, 1.5] on desktop
   const dpr: number | [number, number] = isMobile || quality === 'low' ? 1 : [1, 1.5];
+
+  // Mutually exclusive: If device is mobile/touch, or has no WebGL, or low quality, use optimized BubbleVideoFallback
+  const isWebGlSupported = typeof window !== 'undefined' ? hasWebGLSupport() : false;
+  const shouldRender3D = isWebGlSupported && !isMobile && quality !== 'low' && !Global3DState.prefersReducedMotion;
+
+  if (!shouldRender3D) {
+    return <BubbleVideoFallback />;
+  }
 
   return (
     <div className="fixed inset-0 z-0 w-full h-full bg-[#02050c] overflow-hidden pointer-events-none">

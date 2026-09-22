@@ -11,7 +11,7 @@ export default function Portfolio() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
           <div className="glassmorphism rounded-2xl overflow-hidden border border-white/5 flex flex-col justify-between group transition-all duration-300 hover:border-brand-cyanAccent/30">
             <div className="relative overflow-hidden aspect-video bg-slate-950 flex items-center justify-center">
-              <img src="https://i.imgur.com/XuhJePB.jpeg" alt="W.E.T.H Ministries Website" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-102" loading="lazy" onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1438210159953-cf3f334b5104?auto=format&fit=crop&w=600&q=80'; }} />
+              <img src="/assets/portfolio-weth.jpg" alt="W.E.T.H Ministries Website" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-102" loading="lazy" onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1438210159953-cf3f334b5104?auto=format&fit=crop&w=600&q=80'; }} />
               <div className="absolute inset-0 bg-gradient-to-t from-brand-deep/80 via-transparent to-transparent"></div>
               <span className="absolute top-4 left-4 text-xs font-semibold px-2.5 py-1 rounded bg-brand-electricBlue text-white uppercase tracking-wider">Completed Project</span>
             </div>

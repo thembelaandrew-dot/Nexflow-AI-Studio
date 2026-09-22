@@ -5,6 +5,15 @@ import * as THREE from 'three';
 
 export function PointerController() {
   useEffect(() => {
+    // Disable pointer parallax on mobile, touch, low quality tier, or prefers-reduced-motion
+    if (Global3DState.isMobile || Global3DState.quality === 'low' || Global3DState.prefersReducedMotion) {
+      Global3DState.pointer.x = 0;
+      Global3DState.pointer.y = 0;
+      Global3DState.targetPointer.x = 0;
+      Global3DState.targetPointer.y = 0;
+      return;
+    }
+
     const handlePointerMove = (e: PointerEvent) => {
       // Normalize to -1 to 1
       Global3DState.targetPointer.x = (e.clientX / window.innerWidth) * 2 - 1;
@@ -17,6 +26,10 @@ export function PointerController() {
   }, []);
 
   useFrame((_, delta) => {
+    if (Global3DState.isMobile || Global3DState.quality === 'low' || Global3DState.prefersReducedMotion) {
+      return;
+    }
+
     // Exponential smoothing for pointer
     Global3DState.pointer.x = THREE.MathUtils.lerp(
       Global3DState.pointer.x,
@@ -32,3 +45,4 @@ export function PointerController() {
 
   return null;
 }
+export default PointerController;
