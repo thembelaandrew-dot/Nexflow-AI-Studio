@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Send, Sparkles } from 'lucide-react';
 import emailjs from '@emailjs/browser';
@@ -10,6 +10,7 @@ export default function LeadPopup() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [honeypot, setHoneypot] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
@@ -35,6 +36,29 @@ export default function LeadPopup() {
     e.preventDefault();
     if (!formRef.current) return;
     
+    // Honeypot spam protection
+    if (honeypot) {
+      setSubmitted(true);
+      localStorage.setItem('hasSeenLeadPopup', 'true');
+      setTimeout(() => setIsVisible(false), 2000);
+      return;
+    }
+
+    const formData = new FormData(formRef.current);
+    const userName = String(formData.get('user_name') || '').trim();
+    const userEmail = String(formData.get('user_email') || '').trim();
+
+    if (userName.length < 2) {
+      setError('Please provide a valid name (at least 2 characters).');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(userEmail)) {
+      setError('Please provide a valid email address.');
+      return;
+    }
+
     setIsSubmitting(true);
     setError(null);
     playSynthBeep(500, 0.1);
@@ -55,9 +79,8 @@ export default function LeadPopup() {
         setIsVisible(false);
       }, 3000);
       
-    } catch (err: any) {
-      console.error('EmailJS Error:', err);
-      setError('Failed to send message. Please try again.');
+    } catch {
+      setError('Failed to send request. Please contact us directly.');
       playSynthBeep(200, 0.2, 'square');
     } finally {
       setIsSubmitting(false);
@@ -115,6 +138,17 @@ export default function LeadPopup() {
                   )}
 
                   <form ref={formRef} onSubmit={handleFormSubmission} className="space-y-4">
+                    {/* Honeypot field for bot suppression */}
+                    <input 
+                      type="text" 
+                      name="website_url_hp" 
+                      value={honeypot} 
+                      onChange={(e) => setHoneypot(e.target.value)} 
+                      tabIndex={-1} 
+                      autoComplete="off" 
+                      aria-hidden="true" 
+                      className="hidden opacity-0 pointer-events-none absolute -left-[9999px] w-0 h-0" 
+                    />
                     <div>
                       <input 
                         type="text" 

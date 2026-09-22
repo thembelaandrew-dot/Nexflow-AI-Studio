@@ -18,19 +18,20 @@ const WorkflowNode = ({
 }) => {
   return (
     <motion.div 
-      initial={{ opacity: 0, scale: 0.8 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.5, delay, ease: "easeOut" }}
-      viewport={{ once: true, margin: "-100px" }}
+      initial={{ opacity: 0, scale: 0.85, rotateX: 8 }}
+      whileInView={{ opacity: 1, scale: 1, rotateX: 0 }}
+      transition={{ duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] }}
+      viewport={{ once: true, margin: "-80px" }}
+      style={{ transformStyle: 'preserve-3d' }}
       className={`flex flex-col items-center gap-4 ${align === 'left' ? 'md:items-start' : align === 'right' ? 'md:items-end' : ''}`}
     >
-      <div className={`relative w-24 h-24 rounded-2xl glassmorphism flex items-center justify-center border transition-all duration-700
-        ${active ? 'border-brand-cyanAccent shadow-[0_0_30px_rgba(6,182,212,0.4)] bg-brand-cyanAccent/10 text-brand-cyanAccent' : 'border-white/10 text-slate-400 bg-slate-900/40'}
+      <div className={`relative w-24 h-24 rounded-2xl glassmorphism flex items-center justify-center border transition-all duration-500
+        ${active ? 'border-brand-cyanAccent shadow-[0_0_30px_rgba(6,182,212,0.4)] bg-brand-cyanAccent/10 text-brand-cyanAccent' : 'border-white/10 text-slate-400 bg-slate-900/40 hover:border-brand-electricBlue/40 hover:text-white'}
       `}>
         {active && (
           <div className="absolute inset-0 rounded-2xl border border-brand-cyanAccent animate-ping opacity-20"></div>
         )}
-        <Icon className="w-8 h-8" />
+        <Icon className="w-8 h-8 transition-transform duration-300 group-hover:scale-110" />
       </div>
       <div className="text-center">
         <span className="text-sm font-bold text-white tracking-widest uppercase">{title}</span>

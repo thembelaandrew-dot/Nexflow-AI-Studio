@@ -3,6 +3,8 @@ import path from "path";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI, Type } from "@google/genai";
 import dotenv from "dotenv";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
 
 dotenv.config();
 
@@ -19,21 +21,105 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
-  app.use(express.json());
+  // Security Headers via Helmet
+  app.use(
+    helmet({
+      contentSecurityPolicy: false, // Managed via HTML meta tag to align with Vite
+      crossOriginEmbedderPolicy: false,
+    })
+  );
+
+  // Strict Request Body Size Limit
+  app.use(express.json({ limit: "15kb" }));
+
+  // Explicit CORS / Origin Restriction Middleware
+  app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    const host = req.headers.host;
+
+    // Allowed domains
+    const allowedOrigins = [
+      `http://${host}`,
+      `https://${host}`,
+      "https://nexaflowafrica.netlify.app",
+      "https://nexacasestudy.netlify.app"
+    ];
+
+    if (origin) {
+      if (allowedOrigins.includes(origin) || origin.endsWith(".run.app") || origin.includes("localhost")) {
+        res.setHeader("Access-Control-Allow-Origin", origin);
+      } else {
+        // Block untrusted cross-origin POSTs to API routes
+        if (req.path.startsWith("/api/")) {
+          return res.status(403).json({ error: "Access forbidden from this origin." });
+        }
+      }
+    }
+
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+    if (req.method === "OPTIONS") {
+      return res.sendStatus(204);
+    }
+    next();
+  });
 
   // Health check endpoint
   app.get("/api/health", (req, res) => {
     res.json({ status: "ok" });
   });
 
+  // Rate Limiting on Chat API to protect Gemini quota & prevent abuse
+  const chatLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 30, // 30 requests per 15 min per IP
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: "Too many chat requests from this IP. Please try again after a few minutes." },
+  });
+
   // API route for Chatbot
-  app.post("/api/chat", async (req, res) => {
+  app.post("/api/chat", chatLimiter, async (req, res) => {
     try {
-      console.log("Chatbot: Received request to /api/chat");
       const { messages } = req.body;
+
+      // Input Validation & Sanitization Guardrails
+      if (!Array.isArray(messages) || messages.length === 0 || messages.length > 25) {
+        return res.status(400).json({ error: "Invalid payload: 'messages' must be an array of 1 to 25 items." });
+      }
+
+      const sanitizedMessages: Array<{ role: string; parts: Array<{ text: string }> }> = [];
+
+      for (const msg of messages) {
+        if (!msg || typeof msg !== "object") {
+          return res.status(400).json({ error: "Malformed message object." });
+        }
+
+        const role = msg.role === "model" ? "model" : "user";
+        if (!Array.isArray(msg.parts) || msg.parts.length === 0) {
+          return res.status(400).json({ error: "Each message must contain non-empty parts." });
+        }
+
+        const text = typeof msg.parts[0]?.text === "string" ? msg.parts[0].text.trim() : "";
+        if (!text) {
+          return res.status(400).json({ error: "Message text cannot be empty." });
+        }
+
+        if (text.length > 1500) {
+          return res.status(400).json({ error: "Message exceeds maximum allowed character length (1500 chars)." });
+        }
+
+        // Sanitize control characters
+        const cleanText = text.replace(/[\u0000-\u0008\u000B-\u000C\u000E-\u001F]/g, "");
+
+        sanitizedMessages.push({
+          role,
+          parts: [{ text: cleanText }]
+        });
+      }
       
       if (!process.env.GEMINI_API_KEY) {
-        console.warn("Chatbot: GEMINI_API_KEY is not set. Failing gracefully to trigger client fallback.");
         return res.status(503).json({ error: "Gemini API key not configured" });
       }
       
@@ -63,10 +149,9 @@ If the visitor asks something beyond your knowledge or requests a quotation, nat
 
 CRITICAL: Once you have successfully collected at least the visitor's Name and Email, you MUST immediately call the 'submit_lead' function. You can infer or ask for 'requested_service' and 'message' (conversation summary). After calling the function, confirm with: "Thank you! Your details have been sent successfully. Andrew will get back to you as soon as possible."`;
 
-      console.log("Chatbot: Calling Gemini API with messages...", JSON.stringify(messages.slice(-1)));
       const response = await ai.models.generateContent({
         model: "gemini-3.6-flash",
-        contents: messages,
+        contents: sanitizedMessages,
         config: {
           systemInstruction,
           temperature: 0.7,
@@ -91,50 +176,50 @@ CRITICAL: Once you have successfully collected at least the visitor's Name and E
         }
       });
 
-      console.log("Chatbot: Gemini API responded.");
       let responseText = response.text || "";
       let functionCall = null;
 
       if (response.functionCalls && response.functionCalls.length > 0) {
         const call = response.functionCalls[0];
-        if (call.name === "submit_lead") {
+        if (call.name === "submit_lead" && call.args) {
           functionCall = call;
           
-          console.log("Chatbot: Tool call 'submit_lead' triggered. Preparing EmailJS payload...", call.args);
-          try {
-            const emailjsPayload = {
-              service_id: process.env.EMAILJS_SERVICE_ID || "service_ia09u36",
-              template_id: process.env.EMAILJS_TEMPLATE_ID || "template_ehl0jih",
-              user_id: process.env.EMAILJS_PUBLIC_KEY || "A9RbRJq0719TUlvNx",
-              template_params: {
-                user_name: call.args.visitor_name,
-                user_email: call.args.visitor_email,
-                service_needed: call.args.requested_service,
-                message: call.args.conversation_summary + `\n\nDate & Time: ${new Date().toLocaleString()}`,
-                business_name: "N/A",
-                phone_number: "N/A"
-              }
-            };
-            
-            console.log("Chatbot: Sending fetch request to EmailJS API...");
-            const emailResponse = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(emailjsPayload)
-            });
-            
-            if (emailResponse.ok) {
-              console.log(`Chatbot: EmailJS SUCCESS! Status: ${emailResponse.status}. Lead submitted.`);
-            } else {
-              const errorText = await emailResponse.text();
-              console.error(`Chatbot: EmailJS FAILED. Status: ${emailResponse.status}. Response:`, errorText);
+          // Environment-only EmailJS Credentials (no hardcoded keys)
+          const serviceId = process.env.EMAILJS_SERVICE_ID;
+          const templateId = process.env.EMAILJS_TEMPLATE_ID;
+          const publicKey = process.env.EMAILJS_PUBLIC_KEY;
+
+          if (!serviceId || !templateId || !publicKey) {
+            // Fail gracefully without crashing or leaking keys
+            console.warn("Chatbot: EmailJS credentials not configured in environment variables. Lead submission skipped gracefully.");
+          } else {
+            try {
+              const emailjsPayload = {
+                service_id: serviceId,
+                template_id: templateId,
+                user_id: publicKey,
+                template_params: {
+                  user_name: String(call.args.visitor_name || ""),
+                  user_email: String(call.args.visitor_email || ""),
+                  service_needed: String(call.args.requested_service || ""),
+                  message: `${String(call.args.conversation_summary || "")}\n\nDate & Time: ${new Date().toLocaleString()}`,
+                  business_name: "N/A",
+                  phone_number: "N/A"
+                }
+              };
+              
+              await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(emailjsPayload)
+              });
+            } catch (e) {
+              console.error("Chatbot: Graceful recovery on EmailJS error:", e);
             }
-          } catch (e) {
-            console.error("Chatbot: Exception calling EmailJS API:", e);
           }
 
           if (!responseText) {
-             responseText = "Thank you! Your details have been sent successfully. Andrew will get back to you as soon as possible.";
+            responseText = "Thank you! Your details have been sent successfully. Andrew will get back to you as soon as possible.";
           }
         }
       }
